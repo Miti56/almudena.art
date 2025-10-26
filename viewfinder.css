@@ -96,10 +96,11 @@ div.focus-grid .cnt {
     font-size: 2em;
     width: 1em; height: 1em; line-height: 1em;
     text-align: center;
-    border: 2px solid var(--text-color);
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px var(--text-color);
+    /* border: 2px solid var(--text-color); */
+    /* border-radius: 50%; */
+    /* box-shadow: 0 0 0 1px var(--text-color); */
 }
+
 
 div.focus-grid .grid-lines {
     position: absolute;
