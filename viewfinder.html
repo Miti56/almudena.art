@@ -9,6 +9,12 @@
 </head>
 
 <body>
+<!-- Background video / website blur layer -->
+<div class="background-scene">
+    <video autoplay muted loop id="bg-video-blur">
+        <source src="videoTest.mp4" type="video/mp4">
+    </video>
+</div>
 
 <!-- Fuji camera body container -->
 <div class="camera-shell">
@@ -132,6 +138,26 @@
     video.addEventListener('play', () => {
         updateHistogram();
     });
+
+    // Sync background video with screen loading delay
+    const bgBlur = document.getElementById('bg-video-blur');
+
+    // Pause it initially so it doesn't play yet
+    bgBlur.pause();
+
+    // Start both the camera screen and background video after 3s
+    setTimeout(() => {
+        // Fade out loading
+        loadingScreen.style.transition = 'opacity 0.5s';
+        loadingScreen.style.opacity = 0;
+        setTimeout(() => loadingScreen.style.display = 'none', 500);
+
+        // Sync play with foreground video
+        bgBlur.currentTime = video.currentTime; // align frame if same file
+        bgBlur.play();
+        video.play(); // in case the browser auto-muted paused it
+    }, 3000);
+
 
 
 

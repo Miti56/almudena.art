@@ -284,11 +284,14 @@ div.rec b {
 .camera-shell {
     position: relative;
     display: inline-block;
-    width: 100vw;                /* scale to full width or a fixed px if you prefer */
-    max-width: 1920px;           /* optional limit */
+    width: 70vw;        /* smaller to see more of background */
+    max-width: 1400px;
     height: auto;
     overflow: hidden;
+    z-index: 2;         /* sits above background */
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
 }
+
 
 /* Camera body image */
 .camera-body {
@@ -316,4 +319,35 @@ div.rec b {
     height: 100%;
     position: relative;
     background: black;
+}
+
+/* =========================================================
+   BACKGROUND SCENE (Blurred version of what camera sees)
+   ========================================================= */
+.background-scene {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;  /* behind everything */
+}
+
+.background-scene video,
+.background-scene iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(25px) brightness(0.6) saturate(0.8);
+    transform: scale(1.1);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+    z-index: 3;
+    pointer-events: none;
 }
