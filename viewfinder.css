@@ -1,38 +1,88 @@
+/* =========================================================
+   GLOBAL VARIABLES
+   ========================================================= */
 :root {
     --resolution-w: 1920;
     --resolution-h: 1080;
+
     --screen-color: #000;
     --text-color: #fff;
     --rec-color: #ff0000;
     --hilite-color: #000099;
+
     --font-size: calc(1vw + 0.5vh);
     --padding: 10px;
 }
 
-* { box-sizing: content-box; }
+/* =========================================================
+   GLOBAL STYLES
+   ========================================================= */
+* { box-sizing: border-box; }
+
 html, body {
-    margin: 0; padding: 0; width: 100%; height: 100%;
-    background-color: var(--screen-color); color: var(--text-color);
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    background-color: var(--screen-color);
+    color: var(--text-color);
     font-family: Arial, Helvetica, sans-serif;
-    display: flex; justify-content: center; align-items: center;
-    text-shadow: -1px -1px 0 var(--hilite-color), 1px -1px 0 var(--hilite-color),
-    1px 1px 0 var(--hilite-color), -1px 1px 0 var(--hilite-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: var(--font-size);
+    text-shadow:
+            -1px -1px 0 var(--hilite-color),
+            1px -1px 0 var(--hilite-color),
+            1px  1px 0 var(--hilite-color),
+            -1px  1px 0 var(--hilite-color);
 }
 
+/* =========================================================
+   VIEWFINDER CONTAINER (16:9)
+   ========================================================= */
 .ratio_16x9 {
     position: relative;
-    /* Set full width by default */
-    --width: 100vw; /* define the variable */
-    width: var(--width);
-    height: calc(var(--width) * var(--resolution-h) / var(--resolution-w)); /* maintain 16:9 */
-    max-height: 100vh; /* prevent overflow on short screens */
+    width: 100%;
+    height: 100%;  /* fill the .screen-area completely */
     background-color: var(--screen-color);
     overflow: hidden;
 }
 
 
-/* --- Top-left --- */
+
+/* =========================================================
+   VIDEO BASE LAYER
+   ========================================================= */
+#bg-video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(1.05) contrast(1.2) saturate(1.1) blur(0.5px);
+    transform-origin: center;
+    will-change: transform, filter;
+}
+
+/* =========================================================
+   CAMERA EFFECT CANVAS (chromatic aberration, etc.)
+   ========================================================= */
+#video-effect-canvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+/* =========================================================
+   HUD ELEMENTS (text & icons)
+   ========================================================= */
+.ratio_16x9 > div {
+    z-index: 2;
+}
+
+/* --- Top-left HUD --- */
 div.rec, div.bat, div.wifi {
     position: absolute;
     top: 10px;
@@ -41,25 +91,25 @@ div.rec, div.bat, div.wifi {
     border-radius: 3px;
     font-size: 0.8em;
 }
-div.rec { left: 10px; }
-div.bat { left: 110px; }
+div.rec  { left: 10px; }
+div.bat  { left: 110px; }
 div.wifi { left: 200px; }
 
-/* --- Top-right --- */
+/* --- Top-right HUD --- */
 div.mode, div.focus, div.drive {
     position: absolute;
     top: 10px;
+    right: 10px;
     padding: 2px 5px;
     background: rgba(0,0,0,0.5);
     border-radius: 3px;
     font-size: 0.8em;
     text-align: right;
 }
-div.mode { right: 10px; }
-div.focus { right: 10px; top: 35px; }
-div.drive { right: 10px; top: 60px; }
+div.focus { top: 35px; }
+div.drive { top: 60px; }
 
-/* --- Bottom-left --- */
+/* --- Bottom-left HUD --- */
 div.settings {
     position: absolute;
     bottom: 10px;
@@ -72,7 +122,7 @@ div.settings {
     font-size: 0.8em;
 }
 
-/* --- Bottom-right --- */
+/* --- Bottom-right HUD --- */
 div.counter, div.format {
     position: absolute;
     bottom: 10px;
@@ -84,11 +134,13 @@ div.counter, div.format {
     text-align: right;
 }
 
-/* --- Center grid --- */
+/* --- Center focus grid --- */
 div.focus-grid {
     position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    display: flex; align-items: center; justify-content: center;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 div.focus-grid .cnt {
@@ -96,44 +148,17 @@ div.focus-grid .cnt {
     font-size: 2em;
     width: 1em; height: 1em; line-height: 1em;
     text-align: center;
-    /* border: 2px solid var(--text-color); */
-    /* border-radius: 50%; */
-    /* box-shadow: 0 0 0 1px var(--text-color); */
 }
-
 
 div.focus-grid .grid-lines {
     position: absolute;
-    top:0; left:0; right:0; bottom:0;
+    inset: 0;
     background-image:
             linear-gradient(to right, rgba(255,255,255,0.2) 1px, transparent 1px),
             linear-gradient(to bottom, rgba(255,255,255,0.2) 1px, transparent 1px);
     background-size: 33.33% 33.33%;
     pointer-events: none;
 }
-
-/* --- Gallery Button --- */
-div.gallery {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.6);
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1.2em;
-}
-div.gallery:hover { background: rgba(255,255,255,0.3); }
-
-/* --- Rec blinking --- */
-div.rec b {
-    color: var(--rec-color);
-    animation: blink 1s steps(2, jump-none) infinite;
-}
-@keyframes blink { 0% {opacity:1} 50%{opacity:0} 100%{opacity:1} }
 
 /* --- Histogram --- */
 div.histogram {
@@ -145,78 +170,95 @@ div.histogram {
     background: rgba(0,0,0,0.6);
     border-radius: 4px;
 }
-.ratio_16x9 {
-    position: relative;
-    width: 100vw; /* full width */
-    height: calc(100vw * var(--resolution-h) / var(--resolution-w)); /* maintain 16:9 */
-    max-height: 100vh; /* prevent overflow on short screens */
-    background-color: var(--screen-color);
-    overflow: hidden;
-}
 
-#bg-video {
+/* --- Gallery button --- */
+div.gallery {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    filter: brightness(1.05) contrast(1.2) saturate(1.1) blur(0.5px);
-    transform-origin: center center;
-    will-change: transform, filter;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.6);
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: all 0.2s ease;
+}
+div.gallery:hover { background: rgba(255,255,255,0.3); }
+
+/* --- REC Blinking --- */
+div.rec b {
+    color: var(--rec-color);
+    animation: blink 1s steps(2, jump-none) infinite;
 }
 
-.ratio_16x9 > div {
-    z-index: 1;        /* all HUD overlays above video */
-}
-
-.ratio_16x9::before {
-    content: '';
+/* =========================================================
+   SCREEN OVERLAYS (dust, scratches, reflections, pixels)
+   ========================================================= */
+.pixel-grid {
     position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.1); /* subtle dark overlay */
-    z-index: 0.5;
+    inset: 0;
+    background-image:
+            linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 2px 2px;
+    pointer-events: none;
+    z-index: 2;
+    animation: flicker 0.5s infinite;
 }
+
+/* “Glass” layer — on top of HUD */
 .overlay {
     position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    pointer-events: none; /* so clicks go through */
-    z-index: 1; /* above video but below HUD */
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
 }
 
 .scratches {
     background: url('textures/001.jpg') repeat;
-    opacity: 0.65;
-    mix-blend-mode: lighten; /* blends naturally with video */
+    opacity: 0.95;
+    mix-blend-mode: lighten;
+    animation: subtle-shift 6s ease-in-out infinite;
 }
 
 .dust {
     background: url('textures/Dust-Textures-4.jpg') repeat;
-    opacity: 0.25;
+    opacity: 0.50;
     mix-blend-mode: lighten;
+    animation: subtle-shift 6s ease-in-out infinite;
 }
 
-/*.reflections {*/
-/*    background: url('reflections.png') no-repeat center;*/
-/*    background-size: cover;*/
-/*    opacity: 0.1;*/
-/*    mix-blend-mode: screen;*/
-/*}*/
+/* Optional reflections layer — highest z-index */
+.reflections {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 4;
+    background:
+            radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 20%),
+            radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06), transparent 25%);
+    mix-blend-mode: screen;
+    animation: subtle-shift 10s ease-in-out infinite;
+}
 
+/* =========================================================
+   LOADING SCREEN
+   ========================================================= */
 .loading-screen {
-    position: fixed;       /* cover entire viewport */
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000;      /* fully black */
+    position: fixed;
+    inset: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background: #000;
     color: #00ff00;
     font-family: monospace;
     font-size: 2em;
-    z-index: 9999;         /* above everything */
-    flex-direction: column;
     text-align: center;
+    z-index: 9999;
 }
 
 .loading-text::after {
@@ -224,12 +266,54 @@ div.histogram {
     display: block;
     width: 1em; height: 1em;
     border-radius: 50%;
-    margin: 20px auto 0 auto;
+    margin: 20px auto 0;
     background-color: #00ff00;
     animation: blink 1s steps(2, start) infinite;
 }
 
-@keyframes blink {
-    0%, 50%, 100% { opacity: 1; }
-    25%, 75% { opacity: 0; }
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+@keyframes subtle-shift {
+    0% { transform: translate(0, 0); opacity: 0.3; }
+    50% { transform: translate(1px, -1px); opacity: 0.35; }
+    100% { transform: translate(0, 0); opacity: 0.3; }
+}
+
+/* ---- Camera shell layout ---- */
+.camera-shell {
+    position: relative;
+    display: inline-block;
+    width: 100vw;                /* scale to full width or a fixed px if you prefer */
+    max-width: 1920px;           /* optional limit */
+    height: auto;
+    overflow: hidden;
+}
+
+/* Camera body image */
+.camera-body {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* The LCD screen area (where viewfinder goes) */
+.screen-area {
+    position: absolute;
+    top: 28.5%;
+    left: 5.5%;
+    width: 60%;
+    height: 68.5%;
+    overflow: hidden;
+    z-index: 2;
+    border-radius: 6px;
+}
+
+
+/* Keep your .ratio_16x9 screen behavior inside the LCD */
+.ratio_16x9 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: black;
 }

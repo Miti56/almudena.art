@@ -3,121 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fujifilm-Style Viewfinder</title>
+    <title>Almudena</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css">
     <link rel="stylesheet" href="viewfinder.css">
 </head>
 
 <body>
 
-<div class="ratio_16x9">
-    <!-- Inside .ratio_16x9 -->
-    <video autoplay muted loop id="bg-video">
-        <source src="videoTest.mp4" type="video/mp4">
-    </video>
+<!-- Fuji camera body container -->
+<div class="camera-shell">
+    <!-- Fuji back image (LCD cutout transparent) -->
+    <img src="models/fuji_x100_last.png" alt="Fuji Camera Back" class="camera-body">
+    <!-- LCD screen area -->
+    <div class="screen-area">
+        <!-- 16:9 simulated camera display -->
+        <div class="ratio_16x9">
+            <!-- Background video -->
+            <video autoplay muted loop id="bg-video">
+                <source src="videoTest.mp4" type="video/mp4">
+            </video>
+            <!-- Effect canvas -->
+            <canvas id="video-effect-canvas"></canvas>
+            <!-- Overlay textures (above video, below HUD) -->
+            <div class="overlay scratches"></div>
+            <div class="overlay dust"></div>
+            <div class="overlay reflections"></div>
 
-    <!-- Overlay textures -->
-    <div class="overlay scratches"></div>
-    <div class="overlay dust"></div>
-    <div class="overlay reflections"></div>
+            <!-- Loading screen -->
+            <div class="loading-screen">
+                <div class="loading-text">Initializing Camera...</div>
+            </div>
 
-    <div class="loading-screen">
-        <div class="loading-text">Initializing Camera...</div>
-    </div>
+            <!-- Histogram -->
+            <div class="histogram">
+                <canvas id="histogram" width="200" height="80"></canvas>
+            </div>
 
-    <div class="histogram">
-        <canvas id="histogram" width="200" height="80"></canvas>
-    </div>
+            <!-- HUD Overlays -->
+            <div class="rec"><div class="content">Rec <b>&#x2022;</b></div></div>
+            <div class="bat"><div class="content"><i class="fas fa-battery-full"></i></div></div>
+            <div class="wifi"><div class="content"><i class="fas fa-wifi"></i></div></div>
 
+            <div class="mode"><div class="content">Shooting: A</div></div>
+            <div class="focus"><div class="content">AF-S</div></div>
+            <div class="drive"><div class="content">DRIVE: 1/3</div></div>
 
+            <div class="settings">
+                <div class="shutter">1/125</div>
+                <div class="aperture">f/2.8</div>
+                <div class="iso">ISO 400</div>
+            </div>
 
+            <div class="format"><div class="content">RAW+JPG</div></div>
 
+            <div class="focus-grid">
+                <div class="grid-lines"></div>
+            </div>
 
-    <!-- HUD overlays -->
-    <div class="rec"><div class="content">Rec <b>&#x2022;</b></div></div>
-    <div class="bat"><div class="content"><i class="fas fa-battery-full"></i></div></div>
-    <div class="wifi"><div class="content"><i class="fas fa-wifi"></i></div></div>
-    <div class="mode"><div class="content">Shooting: A</div></div>
-    <div class="focus"><div class="content">AF-S</div></div>
-    <div class="drive"><div class="content">DRIVE: 1/3</div></div>
-    <div class="settings">
-        <div class="shutter">1/125</div>
-        <div class="aperture">f/2.8</div>
-        <div class="iso">ISO 400</div>
-    </div>
-<!--    <div class="counter"><div class="content">123/999</div></div>-->
-    <div class="format"><div class="content">RAW+JPG</div></div>
-    <div class="focus-grid">
-<!--        <div class="cnt"><b>[    ]</b></div>-->
-        <div class="grid-lines"></div>
-    </div>
-    <div class="gallery"><i class="fas fa-images"></i></div>
-</div>
+            <!-- Gallery button -->
+            <div class="gallery"><i class="fas fa-images"></i></div>
+
+        </div> <!-- end .ratio_16x9 -->
+    </div> <!-- end .screen-area -->
+
+</div> <!-- end .camera-shell -->
 
 
 <script>
-    // // Example: Dynamic histogram
-    // const canvas = document.getElementById('histogram');
-    // const ctx = canvas.getContext('2d');
-    // function drawHistogram() {
-    //     ctx.clearRect(0,0,canvas.width,canvas.height);
-    //     for(let i=0;i<canvas.width;i++){
-    //         const h = Math.random()*canvas.height;
-    //         ctx.fillStyle = '#0f0';
-    //         ctx.fillRect(i,canvas.height-h,1,h);
-    //     }
-    //     requestAnimationFrame(drawHistogram);
-    // }
-    // drawHistogram();
-
     // Gallery button click
     document.querySelector('.gallery').addEventListener('click', () => {
         alert('Open Gallery Overlay');
     });
-    // const canvas = document.createElement('canvas');
-    // canvas.width = window.innerWidth;
-    // canvas.height = window.innerHeight;
-    // canvas.style.position = 'absolute';
-    // canvas.style.top = '0';
-    // canvas.style.left = '0';
-    // canvas.style.pointerEvents = 'none';
-    // canvas.style.zIndex = '0.8';
-    // document.querySelector('.ratio_16x9').appendChild(canvas);
-    // const ctx = canvas.getContext('2d');
-    //
-    // function drawGrain() {
-    //     const imgData = ctx.createImageData(canvas.width, canvas.height);
-    //     for (let i = 0; i < imgData.data.length; i += 4) {
-    //         const v = Math.random() * 50; // noise intensity
-    //         imgData.data[i] = v;
-    //         imgData.data[i+1] = v;
-    //         imgData.data[i+2] = v;
-    //         imgData.data[i+3] = 20; // alpha for subtlety
-    //     }
-    //     ctx.putImageData(imgData, 0, 0);
-    //     requestAnimationFrame(drawGrain);
-    // }
-    // drawGrain();
-    //
-    // const overlays = document.querySelectorAll('.overlay');
-    //
-    // function animateOverlay() {
-    //     overlays.forEach(overlay => {
-    //         const x = Math.sin(Date.now() * 0.001) * 1; // tiny horizontal shift
-    //         const y = Math.cos(Date.now() * 0.0015) * 1; // tiny vertical shift
-    //         overlay.style.transform = `translate(${x}px, ${y}px)`;
-    //     });
-    //     requestAnimationFrame(animateOverlay);
-    // }
-    // animateOverlay();
-    //
-    //
-    // function flicker() {
-    //     const alpha = 0.05 + Math.random()*0.05;
-    //     document.querySelector('.reflections').style.opacity = alpha;
-    //     requestAnimationFrame(flicker);
-    // }
-    // flicker();
+
     const loadingScreen = document.querySelector('.loading-screen');
 
     setTimeout(() => {
@@ -172,17 +129,9 @@
         requestAnimationFrame(updateHistogram);
     }
 
-
     video.addEventListener('play', () => {
         updateHistogram();
     });
-
-
-
-
-
-
-
 
 
 
