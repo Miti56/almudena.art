@@ -13,8 +13,8 @@
 /* 4x4 grid layout */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     gap: 15px;
     width: 80%;
     height: 80%;
@@ -41,8 +41,10 @@
 
 /* Hover effects */
 .gallery-cell:hover {
-    outline: 2px solid #00ff00;
-    outline-offset: -2px;
+    outline: 3px solid #00ff00; /* Increased thickness for visibility */
+    outline-offset: 5px;      /* Increased offset to pull it inward, away from any potential overlap */
+    z-index: 1; /* Giving hovered cell a slightly higher z-index in its stacking context */
+    position: relative; /* Needed for z-index to work on non-positioned elements */
 }
 
 .gallery-cell:hover img {
@@ -74,4 +76,18 @@
 .gallery-cell:hover::after {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+}
+
+/* Title above grid */
+.gallery-title {
+    position: absolute;
+    top: 5%;
+    width: 100%;
+    text-align: center;
+    color: #00ff00;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-shadow: 0 0 6px black;
+    pointer-events: none; /* allows hovering the images below */
+    z-index: 6; /* above gallery but below overlays if needed */
 }
