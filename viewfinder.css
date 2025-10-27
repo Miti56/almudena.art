@@ -303,10 +303,10 @@ div.rec b {
 /* The LCD screen area (where viewfinder goes) */
 .screen-area {
     position: absolute;
-    top: 28.5%;
-    left: 5.5%;
-    width: 60%;
-    height: 68.5%;
+    top: 22.5%;
+    left: 11.5%;
+    width: 67%;
+    height: 73%;
     overflow: hidden;
     z-index: 2;
     border-radius: 6px;
@@ -319,35 +319,4 @@ div.rec b {
     height: 100%;
     position: relative;
     background: black;
-}
-
-/* =========================================================
-   BACKGROUND SCENE (Blurred version of what camera sees)
-   ========================================================= */
-.background-scene {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;  /* behind everything */
-}
-
-.background-scene video,
-.background-scene iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: blur(25px) brightness(0.6) saturate(0.8);
-    transform: scale(1.1);
-}
-
-body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.6) 100%);
-    z-index: 3;
-    pointer-events: none;
 }
