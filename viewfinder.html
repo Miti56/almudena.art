@@ -22,50 +22,40 @@
 
     <div class="screen-area">
         <div class="ratio_16x9">
-            <!-- 🖥️ This is the part we’ll replace -->
+
+            <!-- Screen content: menus, video -->
             <div class="screen-content">
                 <video autoplay muted loop id="bg-video">
                     <source src="videoTest.mp4" type="video/mp4" />
                 </video>
-                <canvas id="video-effect-canvas"></canvas>
             </div>
 
-            <!-- 🧩 These overlays stay ABOVE all content -->
-            <div class="overlay scratches"></div>
-            <div class="overlay dust"></div>
-            <div class="overlay reflections"></div>
-
-
-            <!-- Loading screen -->
-            <div class="loading-screen">
-                <div class="loading-text">Initializing Camera...</div>
-            </div>
-
-            <!-- HUD -->
+            <!-- HUD / UI -->
             <div class="rec"><div class="content">Rec <b>&#x2022;</b></div></div>
             <div class="bat"><div class="content"><i class="fas fa-battery-full"></i></div></div>
             <div class="wifi"><div class="content"><i class="fas fa-wifi"></i></div></div>
-
             <div class="mode"><div class="content">Shooting: A</div></div>
             <div class="focus"><div class="content">AF-S</div></div>
             <div class="drive"><div class="content">DRIVE: 1/3</div></div>
-
             <div class="settings">
                 <div class="shutter">1/125</div>
                 <div class="aperture">f/2.8</div>
                 <div class="iso">ISO 400</div>
             </div>
-
             <div class="format"><div class="content">RAW+JPG</div></div>
-
             <div class="focus-grid"><div class="grid-lines"></div></div>
-
             <div class="histogram"><canvas id="histogram" width="200" height="80"></canvas></div>
 
-
+            <!-- Overlays: always on top -->
+            <div class="overlay scratches"></div>
+            <div class="overlay dust"></div>
+            <div class="overlay reflections"></div>
 
         </div>
     </div>
+
+
+</div>
 </div>
 
 <script>

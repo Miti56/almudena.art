@@ -88,7 +88,7 @@ html, body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
+    z-index: 1;
     filter: brightness(1.05) contrast(1.2) saturate(1.1);
 }
 
@@ -245,34 +245,35 @@ div.rec b {
     z-index: 1;
 }
 
-/* Canvas sits right above video */
+/* Video effect canvas */
 #video-effect-canvas {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 5; /* above screen content, below overlays */
+    pointer-events: none;
 }
 
-/* Overlays: scratches, dust, reflections */
+/* Overlays: scratches/dust/reflections */
 .overlay {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 10; /* stays visually above everything */
+    z-index: 10; /* always above everything */
 }
 
 /* Individual overlay styling */
 .overlay.scratches {
     background: url("textures/002.jpg") repeat;
-    opacity: 0.8;
+    opacity: 0.4;
     mix-blend-mode: screen;
 }
 
 .overlay.dust {
     background: url("textures/Dust-Textures-02.jpg") repeat;
-    opacity: 0.25;
-    mix-blend-mode: lighten;
+    opacity: 0.15;
+    mix-blend-mode: darken;
 }
 
 /* Loading Screen (stays above all) */
@@ -349,17 +350,17 @@ div.rec b {
 .focus-grid,
 .histogram,
 .gallery {
-    z-index: 3; /* ⬇️ lowered */
+    z-index: 10;
     position: absolute;
 }
 
-/* --- Screen content (the dynamic area) --- */
+/* Screen content (menus, gallery) */
 .screen-content {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 5; /* ⬆️ Now ABOVE HUD/UI but BELOW overlays */
+    z-index: 4; /* below overlays */
     overflow: hidden;
     display: flex;
     justify-content: center;
