@@ -21,13 +21,14 @@
 }
 
 
+
 /* Individual cells */
 .gallery-cell {
     position: relative;
     overflow: hidden;
     border-radius: 1px;
     cursor: pointer;
-    background: linear-gradient(to bottom, #6a6a6a, #4d4d4d); /* grey gradient */
+    background: linear-gradient(to bottom, #6a6a6a, #4d4d4d);
 }
 
 /* Image styling */
@@ -79,6 +80,7 @@
 }
 
 /* Title above grid */
+/* Title above grid */
 .gallery-title {
     position: absolute;
     top: 5%;
@@ -87,7 +89,7 @@
     color: #00ff00;
     font-size: 1.5em;
     font-weight: bold;
-    text-shadow: 0 0 6px black;
-    pointer-events: none; /* allows hovering the images below */
-    z-index: 6; /* above gallery but below overlays if needed */
+    pointer-events: none;
+    z-index: 6;
+
 }

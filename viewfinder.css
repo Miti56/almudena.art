@@ -41,7 +41,8 @@ html, body {
     height: 100%;
     object-fit: fill;     /* <<< allows stretching */
     display: block;
-    z-index: 1;
+    z-index: 3;
+    pointer-events: none;
 }
 
 /* ---- Screen area sticks to image coordinates ---- */
@@ -267,7 +268,7 @@ div.rec b {
 
 /* Individual overlay styling */
 .overlay.scratches {
-    background: url("textures/002.jpg") repeat;
+    background: url("textures/001.jpg") repeat;
     opacity: 0.8;
     mix-blend-mode: screen;
 }
