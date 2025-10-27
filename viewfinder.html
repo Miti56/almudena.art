@@ -124,13 +124,8 @@
                 histCtx.fillRect(i * (histCanvas.width/bins), histCanvas.height - h, histCanvas.width/bins, h);
             }
         }
-
         requestAnimationFrame(updateHistogram);
     }
-
-    video.addEventListener('play', () => {
-        updateHistogram();
-    });
 </script>
 
 </body>
