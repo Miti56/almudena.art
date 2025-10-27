@@ -22,21 +22,16 @@
 
     <div class="screen-area">
         <div class="ratio_16x9">
-            <!-- 🖥️ This is the part we’ll replace -->
             <div class="screen-content">
                 <video autoplay muted loop id="bg-video">
                     <source src="videoTest.mp4" type="video/mp4" />
                 </video>
                 <canvas id="video-effect-canvas"></canvas>
             </div>
-
-            <!-- 🧩 These overlays stay ABOVE all content -->
             <div class="overlay scratches"></div>
             <div class="overlay dust"></div>
             <div class="overlay reflections"></div>
 
-
-            <!-- Loading screen -->
             <div class="loading-screen">
                 <div class="loading-text">Initializing Camera...</div>
             </div>
@@ -62,6 +57,11 @@
 
             <div class="histogram"><canvas id="histogram" width="200" height="80"></canvas></div>
 
+            <div class="menu-container"></div>
+
+        </div> </div>
+</div>
+
 
 
         </div>
@@ -75,6 +75,9 @@
     const histCtx = histCanvas.getContext('2d');
     const hiddenCanvas = document.createElement('canvas');
     const hiddenCtx = hiddenCanvas.getContext('2d');
+
+    // --- ⬇️ MODIFICATIONS HERE ⬇️ ---
+    const menuContainer = document.querySelector('.menu-container'); // Get the new container
 
     // Fade-in after 3s and start video/histogram
     setTimeout(() => {
@@ -111,19 +114,27 @@
         requestAnimationFrame(updateHistogram);
     }
 
-    const screenArea = document.querySelector('.screen-content');
-
+    // This function now loads content into the new container
     function loadMenu(file) {
         fetch(file)
             .then(response => response.text())
             .then(html => {
-                screenArea.innerHTML = html;
+                menuContainer.innerHTML = html; // Load into .menu-container
+                menuContainer.style.display = 'block'; // Show the container
             })
             .catch(err => console.error('Error loading menu:', err));
     }
 
-    // Map buttons to their menu files
-    document.querySelector('.btn-weird').addEventListener('click', () => loadMenu('viewfinder.html'));
+    // --- NEW FUNCTION ---
+    // This function hides the menu and shows the viewfinder
+    function hideMenu() {
+        menuContainer.innerHTML = ''; // Empty the container
+        menuContainer.style.display = 'none'; // Hide it
+    }
+
+    // --- MODIFIED EVENT LISTENERS ---
+    // Map buttons to their new functions
+    document.querySelector('.btn-weird').addEventListener('click', hideMenu); // This is now the "Back" button
     document.querySelector('.btn-top').addEventListener('click', () => loadMenu('menus/menu2.html'));
     document.querySelector('.btn-middle').addEventListener('click', () => loadMenu('menus/menu3.html'));
     document.querySelector('.btn-bottom').addEventListener('click', () => loadMenu('menus/menu4.html'));

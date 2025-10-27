@@ -171,26 +171,27 @@ div.focus-grid .grid-lines {
     border-radius: 4px;
 }
 
-/* Gallery */
-.gallery {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.6);
-    cursor: pointer;
-    font-size: 1.2em;
-    transition: all 0.2s ease;
-}
-.gallery:hover {
-    background: rgba(255,255,255,0.3);
-}
+/*!* Gallery *!*/
+/*.gallery {*/
+/*    position: absolute;*/
+/*    bottom: 10px;*/
+/*    left: 50%;*/
+/*    transform: translateX(-50%);*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*    border-radius: 50%;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    background: rgba(0,0,0,0.6);*/
+/*    cursor: pointer;*/
+/*    font-size: 1.2em;*/
+/*    transition: all 0.2s ease;*/
+/*}*/
+
+/*.gallery:hover {*/
+/*    background: rgba(255,255,255,0.3);*/
+/*}*/
 
 /* REC Blink */
 div.rec b {
@@ -337,6 +338,26 @@ div.rec b {
     height: 15vw;
 }
 
+/* --- Screen content (the dynamic area) --- */
+.screen-content {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* ⬆️ Now ABOVE HUD/UI but BELOW overlays */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.focus-grid{
+    z-index: 2; /* ⬇️ lowered */
+    position: absolute;
+}
+
+
+
 /* HUD & UI elements go above video but BELOW .screen-content */
 .rec,
 .bat,
@@ -346,22 +367,30 @@ div.rec b {
 .drive,
 .settings,
 .format,
-.focus-grid,
-.histogram,
-.gallery {
+.histogram{
     z-index: 3; /* ⬇️ lowered */
     position: absolute;
 }
-
-/* --- Screen content (the dynamic area) --- */
-.screen-content {
+/*
+==========================
+   MENU CONTAINER
+==========================
+*/
+.menu-container {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 5; /* ⬆️ Now ABOVE HUD/UI but BELOW overlays */
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+    /* Sits on top of HUD (3) and Grid (2) */
+    z-index: 5;
+
+    /* Hidden by default */
+    display: none;
+
+    /* Give menus a solid background */
+    background: #000;
 }
+
+
+
