@@ -1,29 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almudena</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css">
-    <link rel="stylesheet" href="viewfinder.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Almudena — Fullscreen Camera</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" />
+    <link rel="stylesheet" href="viewfinder.css" />
 </head>
 
 <body>
 <!-- Fuji camera body container -->
 <div class="camera-shell">
-    <!-- Fuji back image (LCD cutout transparent) -->
-    <img src="models/XM5-black-final.png" alt="Fuji Camera Back" class="camera-body">
-    <!-- LCD screen area -->
+    <img src="models/XM5-black-final.png" alt="Fuji Camera Back" class="camera-body" />
     <div class="screen-area">
-        <!-- 16:9 simulated camera display -->
         <div class="ratio_16x9">
-            <!-- Background video -->
             <video autoplay muted loop id="bg-video">
-                <source src="videoTest.mp4" type="video/mp4">
+                <source src="videoTest.mp4" type="video/mp4" />
             </video>
-            <!-- Effect canvas -->
+
             <canvas id="video-effect-canvas"></canvas>
-            <!-- Overlay textures (above video, below HUD) -->
             <div class="overlay scratches"></div>
             <div class="overlay dust"></div>
             <div class="overlay reflections"></div>
@@ -33,12 +28,7 @@
                 <div class="loading-text">Initializing Camera...</div>
             </div>
 
-            <!-- Histogram -->
-            <div class="histogram">
-                <canvas id="histogram" width="200" height="80"></canvas>
-            </div>
-
-            <!-- HUD Overlays -->
+            <!-- HUD -->
             <div class="rec"><div class="content">Rec <b>&#x2022;</b></div></div>
             <div class="bat"><div class="content"><i class="fas fa-battery-full"></i></div></div>
             <div class="wifi"><div class="content"><i class="fas fa-wifi"></i></div></div>
@@ -55,18 +45,15 @@
 
             <div class="format"><div class="content">RAW+JPG</div></div>
 
-            <div class="focus-grid">
-                <div class="grid-lines"></div>
-            </div>
+            <div class="focus-grid"><div class="grid-lines"></div></div>
 
-            <!-- Gallery button -->
+            <div class="histogram"><canvas id="histogram" width="200" height="80"></canvas></div>
+
+            <!-- Gallery -->
             <div class="gallery"><i class="fas fa-images"></i></div>
-
-        </div> <!-- end .ratio_16x9 -->
-    </div> <!-- end .screen-area -->
-
-</div> <!-- end .camera-shell -->
-
+        </div>
+    </div>
+</div>
 
 <script>
     // Gallery button click
@@ -75,58 +62,46 @@
     });
 
     const loadingScreen = document.querySelector('.loading-screen');
+    const video = document.getElementById('bg-video');
+    const histCanvas = document.getElementById('histogram');
+    const histCtx = histCanvas.getContext('2d');
+    const hiddenCanvas = document.createElement('canvas');
+    const hiddenCtx = hiddenCanvas.getContext('2d');
 
+    // Fade-in after 3s and start video/histogram
     setTimeout(() => {
         loadingScreen.style.transition = 'opacity 0.5s';
         loadingScreen.style.opacity = 0;
         setTimeout(() => loadingScreen.style.display = 'none', 500);
-    }, 3000); // 3 seconds
-
-    const video = document.getElementById('bg-video');
-    const histCanvas = document.getElementById('histogram');
-    const histCtx = histCanvas.getContext('2d');
-
-    // Hidden canvas to read video pixels
-    const hiddenCanvas = document.createElement('canvas');
-    const hiddenCtx = hiddenCanvas.getContext('2d');
+        video.play();
+        updateHistogram();
+    }, 3000);
 
     function updateHistogram() {
         if (video.readyState >= 2) {
             hiddenCanvas.width = video.videoWidth;
             hiddenCanvas.height = video.videoHeight;
             hiddenCtx.drawImage(video, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
-
             const frame = hiddenCtx.getImageData(0, 0, hiddenCanvas.width, hiddenCanvas.height);
             const data = frame.data;
-
             const bins = 64;
             const histogram = new Array(bins).fill(0);
 
-            // Count brightness per bin
             for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i+1];
-                const b = data[i+2];
-                const brightness = 0.2126*r + 0.7152*g + 0.0722*b; // luminance
-                const bin = Math.min(bins-1, Math.floor(brightness / 256 * bins));
-                histogram[bin]++;
+                const brightness = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
+                histogram[Math.min(bins - 1, Math.floor((brightness / 256) * bins))]++;
             }
 
-            // Find max with small offset to avoid zero division & over-scaling left bin
             const maxVal = Math.max(...histogram) * 1.05;
-
             histCtx.clearRect(0, 0, histCanvas.width, histCanvas.height);
-
             for (let i = 0; i < bins; i++) {
-                // Apply sqrt to reduce dominance of huge peaks (human eye perception)
                 const h = Math.sqrt(histogram[i] / maxVal) * histCanvas.height;
-                histCtx.fillStyle = `lime`;
-                histCtx.fillRect(i * (histCanvas.width/bins), histCanvas.height - h, histCanvas.width/bins, h);
+                histCtx.fillStyle = 'lime';
+                histCtx.fillRect(i * (histCanvas.width / bins), histCanvas.height - h, histCanvas.width / bins, h);
             }
         }
         requestAnimationFrame(updateHistogram);
     }
 </script>
-
 </body>
 </html>

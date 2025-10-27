@@ -1,88 +1,97 @@
-/* =========================================================
-   GLOBAL VARIABLES
-   ========================================================= */
 :root {
-    --resolution-w: 1920;
-    --resolution-h: 1080;
-
     --screen-color: #000;
     --text-color: #fff;
     --rec-color: #ff0000;
     --hilite-color: #000099;
-
-    --font-size: calc(1vw + 0.5vh);
-    --padding: 10px;
 }
 
-/* =========================================================
-   GLOBAL STYLES
-   ========================================================= */
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 html, body {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    background-color: var(--screen-color);
+    width: 100%;
+    height: 100%;
+    background: var(--screen-color);
     color: var(--text-color);
     font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size);
-    text-shadow:
-            -1px -1px 0 var(--hilite-color),
-            1px -1px 0 var(--hilite-color),
-            1px  1px 0 var(--hilite-color),
-            -1px  1px 0 var(--hilite-color);
-}
-
-/* =========================================================
-   VIEWFINDER CONTAINER (16:9)
-   ========================================================= */
-.ratio_16x9 {
-    position: relative;
-    width: 100%;
-    height: 100%;  /* fill the .screen-area completely */
-    background-color: var(--screen-color);
     overflow: hidden;
 }
 
-
-
-/* =========================================================
-   VIDEO BASE LAYER
-   ========================================================= */
-#bg-video {
-    position: absolute;
+/* ---- Fullscreen camera ---- */
+.camera-shell {
+    position: fixed;
     top: 0; left: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    filter: brightness(1.05) contrast(1.2) saturate(1.1) blur(0.5px);
-    transform-origin: center;
-    will-change: transform, filter;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
 }
 
-/* =========================================================
-   CAMERA EFFECT CANVAS (chromatic aberration, etc.)
-   ========================================================= */
-#video-effect-canvas {
+/* ---- Camera image stretches to fill screen ---- */
+.camera-body {
     position: absolute;
     top: 0; left: 0;
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;     /* <<< allows stretching */
+    display: block;
     z-index: 1;
-    pointer-events: none;
-    mix-blend-mode: screen;
 }
 
-/* =========================================================
-   HUD ELEMENTS (text & icons)
-   ========================================================= */
-.ratio_16x9 > div {
+/* ---- Screen area sticks to image coordinates ---- */
+.screen-area {
+    position: absolute;
+    top: 22.5%;
+    left: 11.5%;
+    width: 67%;
+    height: 73%;
+    overflow: hidden;
+    border-radius: 6px;
     z-index: 2;
 }
 
-/* --- Top-left HUD --- */
+
+/* ---- Intrinsic aspect ratio container ---- */
+/* This wrapper keeps correct proportions for the camera image */
+.camera-shell::before {
+    content: "";
+    display: block;
+    width: 100%;
+    /*padding-top: calc(100% * (image-height / image-width));*/
+}
+
+/* Example: if your image is 1600×1000 px */
+.camera-shell::before {
+    padding-top: calc(100% * (1000 / 1600)); /* = 62.5% aspect ratio */
+}
+
+
+/* Internal video layer */
+.ratio_16x9 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: black;
+}
+
+/* Background video */
+#bg-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(1.05) contrast(1.2) saturate(1.1);
+}
+
+/* HUD Elements */
 div.rec, div.bat, div.wifi {
     position: absolute;
     top: 10px;
@@ -95,7 +104,6 @@ div.rec  { left: 10px; }
 div.bat  { left: 110px; }
 div.wifi { left: 200px; }
 
-/* --- Top-right HUD --- */
 div.mode, div.focus, div.drive {
     position: absolute;
     top: 10px;
@@ -109,7 +117,6 @@ div.mode, div.focus, div.drive {
 div.focus { top: 35px; }
 div.drive { top: 60px; }
 
-/* --- Bottom-left HUD --- */
 div.settings {
     position: absolute;
     bottom: 10px;
@@ -122,8 +129,7 @@ div.settings {
     font-size: 0.8em;
 }
 
-/* --- Bottom-right HUD --- */
-div.counter, div.format {
+div.format {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -134,20 +140,12 @@ div.counter, div.format {
     text-align: right;
 }
 
-/* --- Center focus grid --- */
 div.focus-grid {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-div.focus-grid .cnt {
-    display: inline-block;
-    font-size: 2em;
-    width: 1em; height: 1em; line-height: 1em;
-    text-align: center;
 }
 
 div.focus-grid .grid-lines {
@@ -160,163 +158,69 @@ div.focus-grid .grid-lines {
     pointer-events: none;
 }
 
-/* --- Histogram --- */
-div.histogram {
+/* Histogram */
+.histogram {
     position: absolute;
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 200px; height: 80px;
+    width: 200px;
+    height: 80px;
     background: rgba(0,0,0,0.6);
     border-radius: 4px;
 }
 
-/* --- Gallery button --- */
-div.gallery {
+/* Gallery */
+.gallery {
     position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px; height: 40px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(0,0,0,0.6);
     cursor: pointer;
     font-size: 1.2em;
     transition: all 0.2s ease;
 }
-div.gallery:hover { background: rgba(255,255,255,0.3); }
+.gallery:hover {
+    background: rgba(255,255,255,0.3);
+}
 
-/* --- REC Blinking --- */
+/* REC Blink */
 div.rec b {
     color: var(--rec-color);
     animation: blink 1s steps(2, jump-none) infinite;
 }
 
-/* =========================================================
-   SCREEN OVERLAYS (dust, scratches, reflections, pixels)
-   ========================================================= */
-.pixel-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-            linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 2px 2px;
-    pointer-events: none;
-    z-index: 2;
-    animation: flicker 0.5s infinite;
-}
-
-/* “Glass” layer — on top of HUD */
-.overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 3;
-}
-
-.scratches {
-    background: url('textures/001.jpg') repeat;
-    opacity: 0.95;
-    mix-blend-mode: lighten;
-    animation: subtle-shift 6s ease-in-out infinite;
-}
-
-.dust {
-    background: url('textures/Dust-Textures-4.jpg') repeat;
-    opacity: 0.50;
-    mix-blend-mode: lighten;
-    animation: subtle-shift 6s ease-in-out infinite;
-}
-
-/* Optional reflections layer — highest z-index */
-.reflections {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 4;
-    background:
-            radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 20%),
-            radial-gradient(circle at 80% 70%, rgba(255,255,255,0.06), transparent 25%);
-    mix-blend-mode: screen;
-    animation: subtle-shift 10s ease-in-out infinite;
-}
-
-/* =========================================================
-   LOADING SCREEN
-   ========================================================= */
+/* Loading Screen */
 .loading-screen {
     position: fixed;
     inset: 0;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: #000;
     color: #00ff00;
     font-family: monospace;
     font-size: 2em;
-    text-align: center;
     z-index: 9999;
 }
-
 .loading-text::after {
     content: '';
     display: block;
-    width: 1em; height: 1em;
+    width: 1em;
+    height: 1em;
     border-radius: 50%;
     margin: 20px auto 0;
     background-color: #00ff00;
     animation: blink 1s steps(2, start) infinite;
 }
 
-/* =========================================================
-   ANIMATIONS
-   ========================================================= */
-@keyframes subtle-shift {
-    0% { transform: translate(0, 0); opacity: 0.3; }
-    50% { transform: translate(1px, -1px); opacity: 0.35; }
-    100% { transform: translate(0, 0); opacity: 0.3; }
-}
-
-/* ---- Camera shell layout ---- */
-.camera-shell {
-    position: relative;
-    display: inline-block;
-    width: 70vw;        /* smaller to see more of background */
-    max-width: 1400px;
-    height: auto;
-    overflow: hidden;
-    z-index: 2;         /* sits above background */
-    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
-}
-
-
-/* Camera body image */
-.camera-body {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* The LCD screen area (where viewfinder goes) */
-.screen-area {
-    position: absolute;
-    top: 22.5%;
-    left: 11.5%;
-    width: 67%;
-    height: 73%;
-    overflow: hidden;
-    z-index: 2;
-    border-radius: 6px;
-}
-
-
-/* Keep your .ratio_16x9 screen behavior inside the LCD */
-.ratio_16x9 {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background: black;
+@keyframes blink {
+    50% { opacity: 0; }
 }
