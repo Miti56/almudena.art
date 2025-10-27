@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Gallery</title>
+    <link rel="stylesheet" href="../gallery.css">
+</head>
+<body>
+<div class="gallery-screen">
+    <div class="gallery-grid">
+        <!-- 16 cells -->
+        <div class="gallery-cell"><img src="images/photo1.jpg" alt="Photo 1"></div>
+        <div class="gallery-cell"><img src="images/photo2.jpg" alt="Photo 2"></div>
+        <div class="gallery-cell"><img src="images/photo3.jpg" alt="Photo 3"></div>
+        <div class="gallery-cell"><img src="images/photo4.jpg" alt="Photo 4"></div>
+
+        <div class="gallery-cell"><img src="images/photo5.jpg" alt="Photo 5"></div>
+        <div class="gallery-cell"><img src="images/photo6.jpg" alt="Photo 6"></div>
+        <div class="gallery-cell"><img src="images/photo7.jpg" alt="Photo 7"></div>
+        <div class="gallery-cell"><img src="images/photo8.jpg" alt="Photo 8"></div>
+
+        <div class="gallery-cell"><img src="images/photo9.jpg" alt="Photo 9"></div>
+        <div class="gallery-cell"><img src="images/photo10.jpg" alt="Photo 10"></div>
+        <div class="gallery-cell"><img src="images/photo11.jpg" alt="Photo 11"></div>
+        <div class="gallery-cell"><img src="images/photo12.jpg" alt="Photo 12"></div>
+
+        <div class="gallery-cell"><img src="images/photo13.jpg" alt="Photo 13"></div>
+        <div class="gallery-cell"><img src="images/photo14.jpg" alt="Photo 14"></div>
+        <div class="gallery-cell"><img src="images/photo15.jpg" alt="Photo 15"></div>
+        <div class="gallery-cell"><!-- Empty cell example --></div>
+    </div>
+</div>
+
+<script>
+    const cells = document.querySelectorAll('.gallery-cell');
+    cells.forEach(cell => {
+        cell.addEventListener('click', () => {
+            cells.forEach(c => c.classList.remove('selected'));
+            cell.classList.add('selected');
+        });
+    });
+</script>
+</body>
+</html>

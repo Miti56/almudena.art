@@ -13,28 +13,28 @@
 <div class="camera-shell">
     <img src="models/XM5-black-final-PS6.png" alt="Fuji Camera Back" class="camera-body" />
     <!-- Placeholder round buttons -->
-<!--    <div class="camera-buttons">-->
-<!--        <div class="cam-btn btn-circle"></div>-->
-<!--        <div class="cam-btn btn-top"></div>-->
-<!--        <div class="cam-btn btn-middle"></div>-->
-<!--        <div class="cam-btn btn-bottom"></div>-->
-<!--    </div>-->
     <div class="camera-buttons">
         <img src="UI/button1.png" alt="Weird Button" class="cam-btn btn-weird" />
         <img src="UI/button2.png" alt="Top Button" class="cam-btn btn-top" />
         <img src="UI/button3.png" alt="Middle Button" class="cam-btn btn-middle" />
         <img src="UI/button4.png" alt="Bottom Button" class="cam-btn btn-bottom" />
     </div>
+
     <div class="screen-area">
         <div class="ratio_16x9">
-            <video autoplay muted loop id="bg-video">
-                <source src="videoTest.mp4" type="video/mp4" />
-            </video>
+            <!-- 🖥️ This is the part we’ll replace -->
+            <div class="screen-content">
+                <video autoplay muted loop id="bg-video">
+                    <source src="videoTest.mp4" type="video/mp4" />
+                </video>
+                <canvas id="video-effect-canvas"></canvas>
+            </div>
 
-            <canvas id="video-effect-canvas"></canvas>
+            <!-- 🧩 These overlays stay ABOVE all content -->
             <div class="overlay scratches"></div>
             <div class="overlay dust"></div>
             <div class="overlay reflections"></div>
+
 
             <!-- Loading screen -->
             <div class="loading-screen">
@@ -61,7 +61,6 @@
             <div class="focus-grid"><div class="grid-lines"></div></div>
 
             <div class="histogram"><canvas id="histogram" width="200" height="80"></canvas></div>
-
 
 
 
@@ -111,6 +110,24 @@
         }
         requestAnimationFrame(updateHistogram);
     }
+
+    const screenArea = document.querySelector('.screen-content');
+
+    function loadMenu(file) {
+        fetch(file)
+            .then(response => response.text())
+            .then(html => {
+                screenArea.innerHTML = html;
+            })
+            .catch(err => console.error('Error loading menu:', err));
+    }
+
+    // Map buttons to their menu files
+    document.querySelector('.btn-weird').addEventListener('click', () => loadMenu('viewfinder.html'));
+    document.querySelector('.btn-top').addEventListener('click', () => loadMenu('menus/menu2.html'));
+    document.querySelector('.btn-middle').addEventListener('click', () => loadMenu('menus/menu3.html'));
+    document.querySelector('.btn-bottom').addEventListener('click', () => loadMenu('menus/menu4.html'));
+
 </script>
 </body>
 </html>

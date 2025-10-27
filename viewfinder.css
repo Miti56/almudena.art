@@ -54,6 +54,7 @@ html, body {
     overflow: hidden;
     border-radius: 6px;
     z-index: 2;
+    pointer-events: auto;
 }
 
 
@@ -252,28 +253,13 @@ div.rec b {
     height: 100%;
     z-index: 2;
 }
-/* HUD & UI elements go above video but BELOW scratches */
-.rec,
-.bat,
-.wifi,
-.mode,
-.focus,
-.drive,
-.settings,
-.format,
-.focus-grid,
-.histogram,
-.gallery {
-    z-index: 3;
-    position: absolute;
-}
 
 /* Overlays: scratches, dust, reflections */
 .overlay {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 4; /* now ABOVE UI */
+    z-index: 10; /* stays visually above everything */
 }
 
 /* Individual overlay styling */
@@ -349,4 +335,33 @@ div.rec b {
 .btn-bottom {
     width: 15vw;
     height: 15vw;
+}
+
+/* HUD & UI elements go above video but BELOW .screen-content */
+.rec,
+.bat,
+.wifi,
+.mode,
+.focus,
+.drive,
+.settings,
+.format,
+.focus-grid,
+.histogram,
+.gallery {
+    z-index: 3; /* ⬇️ lowered */
+    position: absolute;
+}
+
+/* --- Screen content (the dynamic area) --- */
+.screen-content {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5; /* ⬆️ Now ABOVE HUD/UI but BELOW overlays */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
