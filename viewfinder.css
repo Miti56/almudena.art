@@ -45,6 +45,7 @@ html, body {
     pointer-events: none;
 }
 
+
 /* ---- Screen area sticks to image coordinates ---- */
 .screen-area {
     position: absolute;
