@@ -62,12 +62,6 @@
         </div> </div>
 </div>
 
-
-
-        </div>
-    </div>
-</div>
-
 <script>
     const loadingScreen = document.querySelector('.loading-screen');
     const video = document.getElementById('bg-video');
@@ -134,10 +128,10 @@
 
     // --- MODIFIED EVENT LISTENERS ---
     // Map buttons to their new functions
-    document.querySelector('.btn-weird').addEventListener('click', hideMenu); // This is now the "Back" button
+    document.querySelector('.btn-bottom').addEventListener('click', hideMenu); // This is now the "Back" button
     document.querySelector('.btn-top').addEventListener('click', () => loadMenu('menus/menu2.html'));
-    document.querySelector('.btn-middle').addEventListener('click', () => loadMenu('menus/menu3.html'));
-    document.querySelector('.btn-bottom').addEventListener('click', () => loadMenu('menus/menu4.html'));
+    document.querySelector('.btn-middle').addEventListener('click', () => loadMenu('menus/menu4.html'));
+    document.querySelector('.btn-weird').addEventListener('click', () => loadMenu('menus/menu3.html'));
 
 </script>
 </body>
