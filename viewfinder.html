@@ -11,7 +11,14 @@
 <body>
 <!-- Fuji camera body container -->
 <div class="camera-shell">
-    <img src="models/XM5-black-final-PS4.png" alt="Fuji Camera Back" class="camera-body" />
+    <img src="models/XM5-black-final-PS6.png" alt="Fuji Camera Back" class="camera-body" />
+    <!-- Placeholder round buttons -->
+    <div class="camera-buttons">
+        <div class="cam-btn btn-circle"></div>
+        <div class="cam-btn btn-top"></div>
+        <div class="cam-btn btn-middle"></div>
+        <div class="cam-btn btn-bottom"></div>
+    </div>
     <div class="screen-area">
         <div class="ratio_16x9">
             <video autoplay muted loop id="bg-video">
@@ -49,18 +56,14 @@
 
             <div class="histogram"><canvas id="histogram" width="200" height="80"></canvas></div>
 
-            <!-- Gallery -->
-            <div class="gallery"><i class="fas fa-images"></i></div>
+
+
+
         </div>
     </div>
 </div>
 
 <script>
-    // Gallery button click
-    document.querySelector('.gallery').addEventListener('click', () => {
-        alert('Open Gallery Overlay');
-    });
-
     const loadingScreen = document.querySelector('.loading-screen');
     const video = document.getElementById('bg-video');
     const histCanvas = document.getElementById('histogram');
