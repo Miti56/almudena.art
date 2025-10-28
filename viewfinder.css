@@ -50,8 +50,8 @@ html, body {
 .screen-area {
     position: absolute;
     top: 15%;
-    left: 10%;
-    width: 68.5%;
+    left: 11%;
+    width: 67.5%;
     height: 82%;
     overflow: hidden;
     border-radius: 6px;
@@ -79,6 +79,7 @@ html, body {
 .ratio_16x9 {
     width: 100%;
     height: 100%;
+    /*left: 1%;*/
     position: relative;
     background: black;
 }

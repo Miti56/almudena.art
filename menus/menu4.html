@@ -7,25 +7,92 @@
     <link rel="stylesheet" href="../gallery.css">
 </head>
 <body>
-<div class="gallery-screen">
-    <!-- Dynamic title above grid -->
-    <div class="gallery-title"></div>
 
-    <div class="gallery-grid">
-        <div class="gallery-cell"><img src="../previews/preview1.JPG" alt="Title Test 1"></div>
-        <div class="gallery-cell"><img src="../previews/preview2.JPG" alt="Title Test 2"></div>
-        <div class="gallery-cell"><img src="../previews/preview4.JPG" alt="Title Test 3"></div>
-        <div class="gallery-cell"><img src="../previews/photo.JPG" alt="Photo 4"></div>
-        <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 5"></div>
-        <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 6"></div>
-        <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 7"></div>
-        <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 8"></div>
-        <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 9"></div>
+<div class="gallery-screen">
+    <div class="gallery-title">My Media</div> <div class="gallery-grid">
+    <div class="gallery-cell"
+         data-src="../previews/preview1.JPG"
+         data-title="Title Test 1"
+         data-description="This is a fantastic piece of media. It explores themes of... Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+         data-director="Jane Doe"
+         data-actor="John Smith"
+         data-year="2024"
+         data-runtime="1h 45m">
+        <img src="../previews/preview1.JPG" alt="Title Test 1">
     </div>
+
+    <div class="gallery-cell"
+         data-src="../previews/preview2.JPG"
+         data-title="Title Test 2"
+         data-description="A thrilling sequel to the first installment."
+         data-director="Peter Jones"
+         data-actor="Anna Williams"
+         data-year="2025"
+         data-runtime="2h 10m">
+        <img src="../previews/preview2.JPG" alt="Title Test 2">
+    </div>
+
+    <div class="gallery-cell"
+         data-src="../previews/preview4.JPG"
+         data-title="Title Test 3"
+         data-description="An unrelated short film."
+         data-director="Alan Smithee"
+         data-actor="N/A"
+         data-year="2023"
+         data-runtime="15m">
+        <img src="../previews/preview4.JPG" alt="Title Test 3">
+    </div>
+
+    <div class="gallery-cell"><img src="../previews/photo.JPG" alt="Photo 4"></div>
+    <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 5"></div>
+    <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 6"></div>
+    <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 7"></div>
+    <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 8"></div>
+    <div class="gallery-cell"><img src="../previews/photo1.jpg" alt="Photo 9"></div>
 </div>
 
+    <div class="details-screen">
 
+        <button class="back-button" id="gallery-back-button">&larr; BACK</button>
 
+        <div class="details-content">
 
+            <div class="details-image">
+                <img src="" alt="Selected media">
+            </div>
+
+            <div class="details-title-area">
+                <h2 class="details-title"></h2>
+            </div>
+
+            <div class="details-meta-area">
+                <dl class="details-meta">
+                    <div>
+                        <dt>Director:</dt>
+                        <dd class="details-director"></dd>
+                    </div>
+                    <div>
+                        <dt>Starring:</dt>
+                        <dd class="details-actor"></dd>
+                    </div>
+                    <div>
+                        <dt>Year:</dt>
+                        <dd class="details-year"></dd>
+                    </div>
+                    <div>
+                        <dt>Runtime:</dt>
+                        <dd class="details-runtime"></dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="details-description-area">
+                <p class="details-description"></p>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 </body>
 </html>
