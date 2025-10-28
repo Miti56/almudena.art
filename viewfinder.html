@@ -3,208 +3,56 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Almudena — Fullscreen Camera</title>
+    <title>Almudena — Camera UI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" />
-    <link rel="stylesheet" href="viewfinder.css" />
+    <link rel="stylesheet" href="/css/viewfinder.css" />
 </head>
 
 <body>
-<!-- Fuji camera body containers -->
-<div class="camera-shell">
-    <img src="models/best1_cut.png" alt="Fuji Camera Back" class="camera-body" />
-    <!-- Placeholder round buttons -->
-    <div class="camera-buttons">
-        <img src="UI/button1.png" alt="Weird Button" class="cam-btn btn-weird" />
-        <img src="UI/button2.png" alt="Top Button" class="cam-btn btn-top" />
-        <img src="UI/button3.png" alt="Middle Button" class="cam-btn btn-middle" />
-        <img src="UI/button4.png" alt="Bottom Button" class="cam-btn btn-bottom" />
+<div class="camera-app">
+    <div class="video-wrapper">
+        <video autoplay muted loop id="bg-video">
+            <source src="previews/videoTest.mp4" type="video/mp4" />
+        </video>
+        <canvas id="video-effect-canvas"></canvas>
     </div>
 
-    <div class="screen-area">
-        <div class="ratio_16x9">
-            <div class="screen-content">
-                <video autoplay muted loop id="bg-video">
-                    <source src="videoTest.mp4" type="video/mp4" />
-                </video>
-                <canvas id="video-effect-canvas"></canvas>
-            </div>
-            <div class="overlay scratches"></div>
-            <div class="overlay dust"></div>
-            <div class="overlay reflections"></div>
+    <div class="loading-screen">
+        <div class="loading-text">Initializing Camera...</div>
+    </div>
 
-            <div class="loading-screen">
-                <div class="loading-text">Initializing Camera...</div>
-            </div>
+    <div class="hud-container">
+        <div class="rec"><div class="content">Rec <b>&#x2022;</b></div></div>
+        <div class="bat"><div class="content"><i class="fas fa-battery-full"></i></div></div>
+        <div class="wifi"><div class="content"><i class="fas fa-wifi"></i></div></div>
 
-            <div class="hud-container">
-                <div class="rec"><div class="content">Rec <b>&#x2022;</b></div></div>
-                <div class="bat"><div class="content"><i class="fas fa-battery-full"></i></div></div>
-                <div class="wifi"><div class="content"><i class="fas fa-wifi"></i></div></div>
+        <div class="mode"><div class="content">Shooting: A</div></div>
+        <div class="focus"><div class="content">AF-S</div></div>
+        <div class="drive"><div class="content">DRIVE: 1/3</div></div>
 
-                <div class="mode"><div class="content">Shooting: A</div></div>
-                <div class="focus"><div class="content">AF-S</div></div>
-                <div class="drive"><div class="content">DRIVE: 1/3</div></div>
+        <div class="settings">
+            <div class="shutter">1/125</div>
+            <div class="aperture">f/2.8</div>
+            <div class="iso">ISO 400</div>
+        </div>
 
-                <div class="settings">
-                    <div class="shutter">1/125</div>
-                    <div class="aperture">f/2.8</div>
-                    <div class="iso">ISO 400</div>
-                </div>
+        <div class="format"><div class="content">RAW+JPG</div></div>
 
-                <div class="format"><div class="content">RAW+JPG</div></div>
+        <div class="focus-grid"><div class="grid-lines"></div></div>
 
-                <div class="focus-grid"><div class="grid-lines"></div></div>
+        <div class="histogram"><canvas id="histogram" width="200" height="80"></canvas></div>
+    </div>
 
-                <div class="histogram"><canvas id="histogram" width="200" height="80"></canvas></div>
-            </div>
-            <div class="menu-container"></div>
+    <div class="menu-container"></div>
 
-        </div> </div>
+    <div class="ui-buttons">
+        <button class="ui-btn btn-top">Menu 2</button>
+        <button class="ui-btn btn-middle">Menu 4</button>
+        <button class="ui-btn btn-weird">Menu 3</button>
+        <button class="ui-btn btn-bottom">Back</button>
+    </div>
 </div>
-<script>
-    const loadingScreen = document.querySelector('.loading-screen');
-    const video = document.getElementById('bg-video');
-    const histCanvas = document.getElementById('histogram');
-    const histCtx = histCanvas.getContext('2d');
-    const hiddenCanvas = document.createElement('canvas');
-    const hiddenCtx = hiddenCanvas.getContext('2d');
 
-    // --- ⬇️ MODIFICATIONS HERE ⬇️ ---
-    const menuContainer = document.querySelector('.menu-container'); // Get the new container
-    const hudContainer = document.querySelector('.hud-container');
-
-    // Fade-in after 3s
-    setTimeout(() => {
-        loadingScreen.style.transition = 'opacity 0.5s';
-        loadingScreen.style.opacity = 0;
-        setTimeout(() => loadingScreen.style.display = 'none', 500);
-
-        video.style.display = 'block'; // Show video
-        hudContainer.style.display = 'block'; // ⬅️ SHOW THE HUD
-
-        video.play();
-        updateHistogram();
-    }, 3000);
-
-    function updateHistogram() {
-        if (video.readyState >= 2) {
-            hiddenCanvas.width = video.videoWidth;
-            hiddenCanvas.height = video.videoHeight;
-            hiddenCtx.drawImage(video, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
-            const frame = hiddenCtx.getImageData(0, 0, hiddenCanvas.width, hiddenCanvas.height);
-            const data = frame.data;
-            const bins = 64;
-            const histogram = new Array(bins).fill(0);
-
-            for (let i = 0; i < data.length; i += 4) {
-                const brightness = 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
-                histogram[Math.min(bins - 1, Math.floor((brightness / 256) * bins))]++;
-            }
-
-            const maxVal = Math.max(...histogram) * 1.05;
-            histCtx.clearRect(0, 0, histCanvas.width, histCanvas.height);
-            for (let i = 0; i < bins; i++) {
-                const h = Math.sqrt(histogram[i] / maxVal) * histCanvas.height;
-                histCtx.fillStyle = 'lime';
-                histCtx.fillRect(i * (histCanvas.width / bins), histCanvas.height - h, histCanvas.width / bins, h);
-            }
-        }
-        requestAnimationFrame(updateHistogram);
-    }
-
-    // This function now loads content AND wires up the gallery logic
-    function loadMenu(file) {
-        fetch(file)
-            .then(response => response.text())
-            .then(html => {
-                menuContainer.innerHTML = html; // Load into .menu-container
-                menuContainer.style.display = 'block'; // Show the container
-
-                // --- ⭐ NEW GALLERY LOGIC STARTS HERE ⭐ ---
-
-                // 1. Find all the elements WE JUST LOADED
-                const galleryTitle = menuContainer.querySelector('.gallery-title');
-                const cells = menuContainer.querySelectorAll('.gallery-cell');
-                const detailsScreen = menuContainer.querySelector('.details-screen');
-                const galleryGrid = menuContainer.querySelector('.gallery-grid');
-
-                // Find the back button by its ID
-                const backButton = menuContainer.querySelector('#gallery-back-button');
-
-                // 2. Check if we're on the gallery page (and all elements were found)
-                if (galleryTitle && cells.length > 0 && detailsScreen && backButton && galleryGrid) {
-
-                    // 3. Define the functions to show/hide details
-                    function showDetails(cell) {
-                        // Get data from the clicked cell's data-* attributes
-                        const data = cell.dataset;
-
-                        // Populate the details screen
-                        detailsScreen.querySelector('.details-image img').src = data.src || '';
-                        detailsScreen.querySelector('.details-image img').alt = data.title || 'Media';
-                        detailsScreen.querySelector('.details-title').textContent = data.title || 'No Title';
-                        detailsScreen.querySelector('.details-description').textContent = data.description || 'No description available.';
-                        detailsScreen.querySelector('.details-director').textContent = data.director || 'N/A';
-                        detailsScreen.querySelector('.details-actor').textContent = data.actor || 'N/A';
-                        detailsScreen.querySelector('.details-year').textContent = data.year || 'N/A';
-                        detailsScreen.querySelector('.details-runtime').textContent = data.runtime || 'N/A';
-
-                        // Hide the grid and show the details
-                        galleryGrid.style.display = 'none';
-                        galleryTitle.style.display = 'none'; // Hide title too
-                        detailsScreen.classList.add('active');
-                    }
-
-                    function hideDetails() {
-                        detailsScreen.classList.remove('active'); // Hide details
-                        galleryGrid.style.display = 'grid'; // Restore grid
-                        galleryTitle.style.display = 'block'; // Restore title
-                    }
-
-                    // 4. Add all event listeners
-                    cells.forEach(cell => {
-                        const img = cell.querySelector('img');
-                        if (img) {
-                            // Hover updates the title
-                            cell.addEventListener('mouseenter', () => {
-                                if(galleryTitle) galleryTitle.textContent = img.alt;
-                            });
-                            cell.addEventListener('mouseleave', () => {
-                                if(galleryTitle) galleryTitle.textContent = ''; // Or 'My Media'
-                            });
-
-                            // CLICKING a cell now shows the details
-                            cell.addEventListener('click', () => {
-                                showDetails(cell);
-                            });
-                        }
-                    });
-
-                    // CLICKING the "Back" button hides the details
-                    backButton.addEventListener('click', () => {
-                        hideDetails();
-                    });
-                }
-                // --- ⭐ NEW GALLERY LOGIC ENDS HERE ⭐ ---
-
-            })
-            .catch(err => console.error('Error loading menu:', err));
-    }
-
-
-    // This function hides the menu and shows the viewfinder
-    function hideMenu() {
-        menuContainer.innerHTML = ''; // Empty the container
-        menuContainer.style.display = 'none'; // Hide it
-    }
-
-    // --- MODIFIED EVENT LISTENERS ---
-    // Map buttons to their new functions
-    document.querySelector('.btn-bottom').addEventListener('click', hideMenu); // This is now the "Back" button
-    document.querySelector('.btn-top').addEventListener('click', () => loadMenu('menus/menu2.html'));
-    document.querySelector('.btn-middle').addEventListener('click', () => loadMenu('menus/menu4.html'));
-    document.querySelector('.btn-weird').addEventListener('click', () => loadMenu('menus/menu3.html'));
-
-</script>
+<script src="js/viewfinder.js"></script>
 </body>
 </html>
