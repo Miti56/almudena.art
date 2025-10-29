@@ -58,12 +58,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ===================================================================
-// === CAMERA BUTTON HANDLERS  =======================================
-// ===================================================================
+    // === 💡 MISSING CODE WAS HERE 💡 ====================================
+    // ===================================================================
 
-    const viewfinderPage = "../viewfinder.html";
+    // Add the click listener for the details screen's back button
+    detailsBackButton.addEventListener('click', () => {
+        detailsScreen.classList.remove('active');
+        galleryGrid.style.display = 'grid';   // Show the grid again
+        galleryTitle.style.display = 'block'; // Show the title again
+    });
 
-    // Back Button
+
+    // ===================================================================
+    // === CAMERA BUTTON HANDLERS (Corrected Navigation) ================
+    // ===================================================================
+
+    // Paths are relative to /menus/gallery.html
+    const viewfinderPage = "../index.html"; // Go UP one level
+    const infoPage = "infoViewfinder.html";   // Go to SIBLING page
+
+    // Main Back Button (Goes to Main Viewfinder)
     const backButton = document.querySelector(".btn-back");
     if (backButton) {
         backButton.addEventListener("click", () => {
@@ -71,20 +85,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Display Button (usually cycles back to main view)
+    // Display Button (Goes to Info Page)
     const dispButton = document.querySelector(".btn-disp");
     if (dispButton) {
         dispButton.addEventListener("click", () => {
-            window.location.href = "../menus/infoViewfinder.html";
-        });
-    }
-    // Display Button (usually cycles back to main view)
-    const gallerypButton = document.querySelector(".btn-2");
-    if (gallerypButton) {
-        gallerypButton.addEventListener("click", () => {
-            window.location.href = viewfinderPage;
+            // This path was wrong, it should be the sibling page
+            window.location.href = infoPage;
         });
     }
 
-
+    // Gallery Button (You are already here)
+    const galleryButton = document.querySelector(".btn-2");
+    if (galleryButton) {
+        galleryButton.addEventListener("click", () => {
+            // This button shouldn't go back, it's the active page
+            console.log("Already on Gallery page.");
+        });
+    }
 });

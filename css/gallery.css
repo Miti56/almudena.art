@@ -1,8 +1,3 @@
-/* === REPLACEMENT gallery.css (Complete File) === */
-
-/* The main container.
-  It now uses Flexbox to organize the title and grid.
-*/
 .gallery-screen {
     position: relative;
     width: 100%;
