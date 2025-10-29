@@ -1,49 +1,106 @@
-.gallery-screen {
-    position: relative;
+/* === GLOBAL 16:9 CAMERA FRAME === */
+html, body {
+    margin: 0;
+    padding: 0;
     width: 100%;
-    height: 100%;
-    background: #000;
-    /* padding: 20px; <-- GONE */
-    box-sizing: border-box;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #000; /* Letterbox bars */
+    color: #ddd;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1.2vmin;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* === MAIN 16:9 CONTAINER === */
+.camera-display {
+    position: relative;
     display: flex;
     flex-direction: column;
+    aspect-ratio: 16 / 9;
+    width: 100vw;
+    max-height: 100vh;
+    box-sizing: border-box;
+    background: #000; /* fallback for now */
+    overflow: hidden;
 }
+
+/* === GALLERY SCREEN INSIDE CAMERA DISPLAY === */
+.gallery-screen {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    height: 100%;
+
+    /* --- ADD THESE LINES --- */
+    background-color: #070707; /* This is your fallback color */
+    background-image: url('../UX/complete_transparent.png'); /* 👈 Add your image path */
+    background-size: cover;
+    background-position: center;
+    /* --- END OF CHANGES --- */
+
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
 
 .gallery-title {
     flex-shrink: 0;
-    /* width: 100%; <-- No longer needed */
     text-align: center;
     color: #00ff00;
-    font-size: 1.5em;
+    font-size: 1.5em; /* This is fine, it scales with vmin from body */
     font-weight: bold;
     pointer-events: none;
     height: 1.5em;
 
-    margin: 20px 20px 0 20px; /* <--- CHANGE THIS LINE (was margin-bottom: 20px) */
+    /* Replaces margin: 20px 20px 0 20px; */
+    /* Use padding to position it from the top */
+    padding-top: 1.85%;
 }
 
-/* 4x4 grid layout */
+
+/* === GALLERY GRID === */
 .gallery-grid {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 15px;
-    overflow-y: auto;
+    grid-template-columns: repeat(3, 1fr); /* 3 across */
+    grid-auto-rows: auto;
 
-    padding: 20px; /* <--- ADD THIS LINE */
-    box-sizing: border-box; /* <--- AND THIS ONE */
+    /* ⬇️ tweak these two values to your taste */
+    /* Replaces 'gap: 25px;' */
+    row-gap: 0px;    /* Sets the vertical space between rows */
+    column-gap: 7px; /* Sets the horizontal space between columns */
+    padding-top: 42px;
+    padding-bottom: 65px;
+    padding-left: 237px;
+    padding-right: 238px;
+
+    box-sizing: border-box;
+    overflow-y: auto;
+    justify-items: center;
+    align-items: center;
 }
 
-/* Individual cells */
+/* === GALLERY CELLS === */
 .gallery-cell {
     position: relative;
     overflow: hidden;
-    border-radius: 1px;
+    border-radius: 2px;
     cursor: pointer;
     background: linear-gradient(to bottom, #6a6a6a, #4d4d4d);
-    aspect-ratio: 16 / 9; /* Ensures cells are widescreen */
+
+    /* keep 16:9 but smaller thumbnails */
+    aspect-ratio: 16 / 9;
+    width: 100%;   /* ← controls thumbnail size (try 70–95%) */
+
+    transition: transform 0.2s ease, outline 0.2s ease;
 }
+
 
 /* Image styling */
 .gallery-cell img {
@@ -95,30 +152,46 @@
    DETAILS SCREEN (BALANCED 2x2 GRID)
 ================================
 */
-
-/* The Details Screen (wrapper) */
+/* === DETAILS SCREEN OVERLAY === */
+/* === DETAILS SCREEN OVERLAY === */
 .details-screen {
+    /* This should be 'absolute' to be contained by .camera-display
+       or 'fixed' if it must cover the whole viewport.
+       'absolute' is likely what you want. */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 10;
-    background: #000;
 
-    /* Display is 'none' by default */
+    /* Background properties are fine */
+    background: #000;
+    background-image: url('../UX/info2PS.png');
+    background-size: 100% 100%; /* Changed from cover */
+    background-position: center;
+
     display: none;
     flex-direction: column;
-    padding: 20px;
+    justify-content: flex-start;
+    align-items: stretch;
     box-sizing: border-box;
+    overflow: hidden;
+
+    /* Replaces 'padding: 30px' */
+    /* (Assuming 30px on a 1080p screen) */
+    padding-top: 2.78%;    /* 30px / 1080px height */
+    padding-bottom: 2.78%;
+    padding-left: 1.56%;   /* 30px / 1920px width */
+    padding-right: 1.56%;
 }
 
-/* This class is added by JavaScript */
+/* Show details screen */
 .details-screen.active {
-    display: flex; /* Show the screen */
+    display: flex;
 }
 
-/* Back Button (now at top) */
+/* Back Button */
 .back-button {
     background: transparent;
     border: 1px solid #00ff00;
@@ -127,94 +200,82 @@
     font-weight: bold;
     padding: 8px 15px;
     cursor: pointer;
-    margin-bottom: 20px;
-    transition: all 0.2s ease;
-    align-self: flex-start; /* Don't stretch */
+    /* Replaces 'margin-bottom: 20px' */
+    margin-bottom: 1.85%; /* 20px / 1080px height */
+
+    flex-shrink: 0; /* Add this to prevent it from shrinking */
+    z-index: 20;
+    align-self: flex-start;
 }
 .back-button:hover {
     background: #00ff00;
     color: #000;
 }
 
-
-/* === NEW 2x2 GRID LAYOUT === */
-
+/* === BALANCED 2x2 GRID INSIDE DETAILS === *//* === BALANCED 2x2 GRID INSIDE DETAILS === */
 .details-content {
-    /* This is now a 2-column grid */
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 2 equal columns */
-    grid-template-rows: 1fr 1fr;   /* 2 equal rows */
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     grid-template-areas:
         "image title"
         "meta  desc";
-    gap: 20px 40px; /* 20px row gap, 40px col gap */
-    width: 100%;
+
+    /* Replaces 'gap: 20px 40px' */
+    row-gap: 1.85%;    /* 20px / 1080px height */
+    column-gap: 2.08%; /* 40px / 1920px width */
+
     flex-grow: 1; /* Fills remaining space */
-    overflow: hidden; /* Prevent content from breaking out */
+    width: 100%;
+    overflow: hidden;
 }
 
-/* --- Grid Area Assignments --- */
+/* Grid assignments */
 .details-image            { grid-area: image; }
 .details-title-area       { grid-area: title; }
 .details-meta-area        { grid-area: meta; }
 .details-description-area { grid-area: desc; }
 
+/* === Individual Areas === */
 
-/* Top-Left: Image */
+/* Image area */
 .details-image {
     position: relative;
     width: 100%;
-    height: 100%; /* Fill its quadrant */
+    height: 100%;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .details-image img {
-    width: 100%;
-    height: 100%; /* Fill the container */
-    object-fit: contain; /* Won't stretch/skew */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
     border: 2px solid #00ff00;
-    border-radius: 2px;
-    display: block;
+    border-radius: 3px;
 }
 
-/* Top-Right: Title */
+/* Title area */
 .details-title-area {
-    /* Aligns title to bottom of its cell */
     display: flex;
     align-items: flex-end;
-    overflow: hidden; /* Prevent text overflow */
+    padding: 10px;
+    overflow: hidden;
 }
 .details-title {
     color: #00ff00;
-    font-size: 2.8em;
+    font-size: 2.5em;
     font-weight: bold;
     margin: 0;
-    line-height: 1.1;
 }
 
-/* Bottom-Left: Metadata */
+/* Metadata area */
 .details-meta-area {
     color: #f0f0f0;
+    overflow-y: auto;
+    padding: 10px;
     font-family: Arial, sans-serif;
-    overflow-y: auto; /* Allow scrolling if meta list is long */
-    padding-top: 10px;
-}
-
-/* Bottom-Right: Description */
-.details-description-area {
-    color: #f0f0f0;
-    font-family: Arial, sans-serif;
-    overflow-y: auto; /* Allow scrolling */
-    padding-top: 10px;
-}
-.details-description {
-    font-size: 1.1em;
-    line-height: 1.6;
-    color: #cccccc;
-    margin: 0;
-}
-
-/* Metadata List */
-.details-meta {
-    font-size: 1em;
 }
 .details-meta div {
     display: flex;
@@ -224,11 +285,19 @@
     color: #00ff00;
     font-weight: bold;
     width: 100px;
-    flex-shrink: 0;
 }
 .details-meta dd {
     margin-left: 10px;
-    color: #f0f0f0;
+}
+
+/* Description area */
+.details-description-area {
+    color: #ccc;
+    padding: 10px;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    font-size: 1.1em;
+    line-height: 1.6;
 }
 
 /* Menu container */

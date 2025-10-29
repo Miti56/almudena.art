@@ -201,3 +201,12 @@ div.format {
     background: rgba(255,255,255,0.25);
 }
 
+/* REC Blink */
+div.rec b {
+    color: var(--rec-color);
+    animation: blink 1s steps(2, jump-none) infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
