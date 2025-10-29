@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Camera Display</title>
+    <link rel="stylesheet" href="../css/infoViewfinder.css" />
+</head>
+<body>
+
+<div class="camera-display">
+    <div class="preview">
+        <video autoplay muted loop class="preview-video">
+            <source src="../previews/videoTest.mp4" type="video/mp4" />
+        </video>
+    </div>
+    <div class="info-box histogram-box">
+        <canvas id="histogram-canvas"></canvas>
+    </div>
+
+    <div class="ui-buttons">
+        <button class="ui-btn btn-1">Menu 1</button>
+        <button class="ui-btn btn-2">Gallery</button>
+        <button class="ui-btn btn-back">Back</button>
+        <button class="ui-btn btn-disp">Disp</button>
+    </div>
+
+</div>
+
+<script type="module" src="/js/infoViewfinder.js"></script>
+
+</body>
+
+</html>

@@ -97,12 +97,17 @@ export function hideMenu() {
 
 
 document.querySelector('.btn-1')?.addEventListener('click', () =>
-    loadMenu('../menus/menu1.html', 'menu2')
+    loadMenu('/menus/menu1.html', 'menu2')
 );
 
 document.querySelector('.btn-2')?.addEventListener('click', () =>
     loadMenu('menus/gallery.html', 'gallery') // assuming js/gallery.js
 );
 
+
+// We now just tell the browser to go to this page
+document.querySelector('.btn-disp')?.addEventListener('click', () => {
+    window.location.href = 'menus/infoViewfinder.html';
+})
 
 document.querySelector('.btn-back')?.addEventListener('click', hideMenu);

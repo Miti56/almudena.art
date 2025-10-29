@@ -1,0 +1,136 @@
+/* General page setup */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh; /* Use vh for full viewport height */
+    overflow: hidden; /* Prevents scrollbars */
+    background-color: #000; /* This creates the black "letterbox" bars */
+    color: #ddd;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+    font-weight: bold;
+    font-size: 1.2vmin;
+}
+
+/* Use flexbox on the body to center the 16:9 display */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Main container */
+.camera-display {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    /* --- THIS IS THE 16:9 LOCK --- */
+    aspect-ratio: 16 / 9;
+    width: 100vw; /* Tries to fill the width */
+    max-height: 100vh; /* ...but stops if it gets too tall */
+    /* --- END OF LOCK --- */
+
+    /* Padding is now relative to the container's scaling size */
+    padding: 2.5%;
+
+    /* Background fills the 16:9 container perfectly */
+    background-image: url('/UX/shootingInfoPS.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Your preview rule is now PERFECT for this setup.
+   All percentages (left, top, width) are relative
+   to the .camera-display container. */
+.preview {
+    position: absolute;
+    left: 16%;
+    top: 12%;
+    width: 24%;
+    aspect-ratio: 16 / 9;
+    border: 2px solid #555;
+    background: #111;
+}
+.preview-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.info-box {
+    /* Positioning styles from middle-area are now here */
+    position: absolute;
+    top: 23%;
+    left: 59%;
+    width: 28%;
+    height: 16%;
+
+    /* Original styles */
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 1px;
+    display: flex;
+    font-size: 1.5rem;
+
+    /* Styles from histogram-box are also merged for simplicity */
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+}
+
+/* This new rule styles the box containing the canvas */
+.histogram-box {
+    padding: 0; /* Remove default padding */
+    background-color: #111; /* Dark background for the histogram */
+    align-items: stretch; /* Make children fill the height */
+    justify-content: stretch; /* Make children fill the width */
+}
+
+/* This new rule styles the canvas itself */
+#histogram-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+/* Menu container */
+.menu-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    display: none;
+    background: #000;
+}
+
+/* Simplified buttons */
+.ui-buttons {
+    position: absolute;
+    right: 20px;
+    top: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 5;
+}
+
+.ui-btn {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.ui-btn:hover {
+    background: rgba(255,255,255,0.25);
+}
+
