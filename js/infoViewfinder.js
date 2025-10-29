@@ -81,11 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Video element not found!");
     }
 
+    // ===================================================================
+// === CAMERA BUTTON HANDLERS  =======================================
+// ===================================================================
 
-    // === BUTTON EVENT LISTENERS (NEW CODE) ===
-
-    // Define the base path to go back
-    // Adjust this path if your viewfinder.html is in a different directory
     const viewfinderPage = "../viewfinder.html";
 
     // Back Button
@@ -104,22 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Placeholder for Menu 1
-    const menu1Button = document.querySelector(".btn-1");
-    if (menu1Button) {
-        menu1Button.addEventListener("click", () => {
-            console.log("Menu 1 Clicked");
-            // Example: window.location.href = "menu1.html";
-        });
-    }
 
-    // Placeholder for Gallery
-    const galleryButton = document.querySelector(".btn-2");
-    if (galleryButton) {
-        galleryButton.addEventListener("click", () => {
-            console.log("Gallery Clicked");
-            // Example: window.location.href = "gallery.html";
-        });
-    }
 
 });

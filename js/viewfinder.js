@@ -20,7 +20,7 @@ setTimeout(() => {
 
     video.play();
     updateHistogram();
-}, 3000);
+}, 0);
 
 // === HISTOGRAM UPDATER ===
 function updateHistogram() {
@@ -57,57 +57,36 @@ function updateHistogram() {
     requestAnimationFrame(updateHistogram);
 }
 
-// ===================================================================
-// === MODULAR MENU SYSTEM  ==========================================
-// ===================================================================
-
-export async function loadMenu(file, scriptName) {
-    try {
-        const res = await fetch(file);
-        const html = await res.text();
-
-        menuContainer.innerHTML = html;
-        menuContainer.style.display = 'block';
-
-        // Load its JS companion from /js/
-        if (scriptName) {
-            try {
-                const module = await import(`./${scriptName}.js`);
-                if (typeof module.init === 'function') {
-                    module.init(menuContainer);
-                }
-            } catch (err) {
-                console.warn(`No JS module found for ${scriptName}:`, err);
-            }
-        }
-    } catch (err) {
-        console.error('Error loading menu:', err);
-    }
-}
-
-
-export function hideMenu() {
-    menuContainer.innerHTML = '';
-    menuContainer.style.display = 'none';
-}
 
 // ===================================================================
 // === CAMERA BUTTON HANDLERS  =======================================
 // ===================================================================
+// ===================================================================
+// === CAMERA BUTTON HANDLERS  =======================================
+// ===================================================================
 
+const viewfinderPage = "viewfinder.html";
 
-document.querySelector('.btn-1')?.addEventListener('click', () =>
-    loadMenu('/menus/menu1.html', 'menu2')
-);
+// Back Button
+const backButton = document.querySelector(".btn-back");
+if (backButton) {
+    backButton.addEventListener("click", () => {
+        window.location.href = viewfinderPage;
+    });
+}
 
-document.querySelector('.btn-2')?.addEventListener('click', () =>
-    loadMenu('menus/gallery.html', 'gallery') // assuming js/gallery.js
-);
+// Display Button (usually cycles back to main view)
+const dispButton = document.querySelector(".btn-disp");
+if (dispButton) {
+    dispButton.addEventListener("click", () => {
+        window.location.href = "menus/infoViewfinder.html";
+    });
+}
 
-
-// We now just tell the browser to go to this page
-document.querySelector('.btn-disp')?.addEventListener('click', () => {
-    window.location.href = 'menus/infoViewfinder.html';
-})
-
-document.querySelector('.btn-back')?.addEventListener('click', hideMenu);
+// Display Button (usually cycles back to main view)
+const gallerypButton = document.querySelector(".btn-2");
+if (gallerypButton) {
+    gallerypButton.addEventListener("click", () => {
+        window.location.href = "menus/gallery.html";
+    });
+}

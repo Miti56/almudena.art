@@ -1,12 +1,25 @@
-export function init(root) {
-    const galleryScreen = root.querySelector('.gallery-screen');
-    const galleryTitle = root.querySelector('.gallery-title');
-    const galleryGrid = root.querySelector('.gallery-grid');
-    const cells = galleryGrid?.querySelectorAll('.gallery-cell') || [];
-    const detailsScreen = root.querySelector('.details-screen');
-    const backButton = root.querySelector('#gallery-back-button');
+/*
+ * This is js/gallery.js
+ * It is now a standalone script loaded by gallery.html.
+ */
 
-    if (!galleryScreen || !galleryTitle || !galleryGrid || !detailsScreen || !backButton) {
+// Wait for the HTML page to be fully loaded before running code
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Selectors are now based on 'document'
+    const galleryScreen = document.querySelector('.gallery-screen');
+    const galleryTitle = document.querySelector('.gallery-title');
+    const galleryGrid = document.querySelector('.gallery-grid');
+    const cells = galleryGrid?.querySelectorAll('.gallery-cell') || [];
+    const detailsScreen = document.querySelector('.details-screen');
+
+    // This is the BACK button for the DETAILS screen
+    const detailsBackButton = document.querySelector('#gallery-back-button');
+
+    // This is the main BACK button for the whole UI
+    const mainBackButton = document.querySelector('.ui-buttons .btn-back');
+
+    if (!galleryScreen || !galleryTitle || !galleryGrid || !detailsScreen || !detailsBackButton || !mainBackButton) {
         console.warn('Gallery structure missing expected elements.');
         return;
     }
@@ -17,7 +30,8 @@ export function init(root) {
         if (!img) return;
 
         cell.addEventListener('mouseenter', () => {
-            galleryTitle.textContent = img.alt || '';
+            const title = cell.dataset.title || img.alt || 'My Media';
+            galleryTitle.textContent = title;
         });
         cell.addEventListener('mouseleave', () => {
             galleryTitle.textContent = 'My Media';
@@ -36,13 +50,13 @@ export function init(root) {
             const yearEl = detailsScreen.querySelector('.details-year');
             const runtimeEl = detailsScreen.querySelector('.details-runtime');
 
-            detailsImg.src = imgSrc;
-            titleEl.textContent = data.title || img.alt || 'Untitled';
-            descEl.textContent = data.description || '';
-            dirEl.textContent = data.director || 'N/A';
-            actorEl.textContent = data.actor || 'N/A';
-            yearEl.textContent = data.year || 'N/A';
-            runtimeEl.textContent = data.runtime || 'N/A';
+            if (detailsImg) detailsImg.src = imgSrc;
+            if (titleEl) titleEl.textContent = data.title || img.alt || 'Untitled';
+            if (descEl) descEl.textContent = data.description || '';
+            if (dirEl) dirEl.textContent = data.director || 'N/A';
+            if (actorEl) actorEl.textContent = data.actor || 'N/A';
+            if (yearEl) yearEl.textContent = data.year || 'N/A';
+            if (runtimeEl) runtimeEl.textContent = data.runtime || 'N/A';
 
             galleryGrid.style.display = 'none';
             galleryTitle.style.display = 'none';
@@ -50,10 +64,35 @@ export function init(root) {
         });
     });
 
-    // Back button
-    backButton.addEventListener('click', () => {
-        detailsScreen.classList.remove('active');
-        galleryGrid.style.display = 'grid';
-        galleryTitle.style.display = 'block';
-    });
-}
+    // ===================================================================
+// === CAMERA BUTTON HANDLERS  =======================================
+// ===================================================================
+
+    const viewfinderPage = "../viewfinder.html";
+
+    // Back Button
+    const backButton = document.querySelector(".btn-back");
+    if (backButton) {
+        backButton.addEventListener("click", () => {
+            window.location.href = viewfinderPage;
+        });
+    }
+
+    // Display Button (usually cycles back to main view)
+    const dispButton = document.querySelector(".btn-disp");
+    if (dispButton) {
+        dispButton.addEventListener("click", () => {
+            window.location.href = viewfinderPage;
+        });
+    }
+
+    // Display Button (usually cycles back to main view)
+    const gallerypButton = document.querySelector(".btn-2");
+    if (gallerypButton) {
+        gallerypButton.addEventListener("click", () => {
+            window.location.href = viewfinderPage;
+        });
+    }
+
+
+});

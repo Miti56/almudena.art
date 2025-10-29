@@ -235,3 +235,38 @@
     margin-left: 10px;
     color: #f0f0f0;
 }
+
+/* Menu container */
+.menu-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 4;
+    display: none;
+    background: #000;
+}
+
+/* Simplified buttons */
+.ui-buttons {
+    position: absolute;
+    right: 20px;
+    top: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 5;
+}
+
+.ui-btn {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.ui-btn:hover {
+    background: rgba(255,255,255,0.25);
+}
