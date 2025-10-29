@@ -102,6 +102,13 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = viewfinderPage;
         });
     }
+    // Display Button (usually cycles back to main view)
+    const gallerypButton = document.querySelector(".btn-2");
+    if (gallerypButton) {
+        gallerypButton.addEventListener("click", () => {
+            window.location.href = "../menus/gallery.html";
+        });
+    }
 
 
 

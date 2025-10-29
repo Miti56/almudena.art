@@ -1,11 +1,4 @@
-/*
- * This is js/gallery.js
- * It is now a standalone script loaded by gallery.html.
- */
-
-// Wait for the HTML page to be fully loaded before running code
 document.addEventListener('DOMContentLoaded', () => {
-
     // Selectors are now based on 'document'
     const galleryScreen = document.querySelector('.gallery-screen');
     const galleryTitle = document.querySelector('.gallery-title');
@@ -82,10 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const dispButton = document.querySelector(".btn-disp");
     if (dispButton) {
         dispButton.addEventListener("click", () => {
-            window.location.href = viewfinderPage;
+            window.location.href = "../menus/infoViewfinder.html";
         });
     }
-
     // Display Button (usually cycles back to main view)
     const gallerypButton = document.querySelector(".btn-2");
     if (gallerypButton) {
