@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Selectors are now based on 'document'
     const galleryScreen = document.querySelector('.gallery-screen');
     const galleryTitle = document.querySelector('.gallery-title');
     const galleryGrid = document.querySelector('.gallery-grid');
@@ -81,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+
+
 
     // ===================================================================
     // === CAMERA BUTTON HANDLERS  =======================================

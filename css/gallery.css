@@ -25,7 +25,7 @@ html, body {
     width: 100vw;
     max-height: 100vh;
     box-sizing: border-box;
-    background: #000; /* fallback for now */
+    background: #000;
     overflow: hidden;
 }
 
@@ -35,14 +35,10 @@ html, body {
     flex: 1;
     width: 100%;
     height: 100%;
-
-    /* --- ADD THESE LINES --- */
-    background-color: #070707; /* This is your fallback color */
-    background-image: url('../UX/complete_transparent.png'); /* 👈 Add your image path */
+    background-color: #070707;
+    background-image: url('../UX/complete_transparent.png');
     background-size: cover;
     background-position: center;
-    /* --- END OF CHANGES --- */
-
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
@@ -53,13 +49,10 @@ html, body {
     flex-shrink: 0;
     text-align: center;
     color: #00ff00;
-    font-size: 1.5em; /* This is fine, it scales with vmin from body */
+    font-size: 1.5em;
     font-weight: bold;
     pointer-events: none;
     height: 1.5em;
-
-    /* Replaces margin: 20px 20px 0 20px; */
-    /* Use padding to position it from the top */
     padding-top: 1.85%;
 }
 
@@ -68,17 +61,19 @@ html, body {
 .gallery-grid {
     flex-grow: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 across */
+    grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: auto;
+    row-gap: 0px;
+    column-gap: 7px;
 
-    /* ⬇️ tweak these two values to your taste */
-    /* Replaces 'gap: 25px;' */
-    row-gap: 0px;    /* Sets the vertical space between rows */
-    column-gap: 7px; /* Sets the horizontal space between columns */
-    padding-top: 42px;
-    padding-bottom: 65px;
-    padding-left: 237px;
-    padding-right: 238px;
+    /* --- CHANGED --- */
+    /* Replaced fixed pixels with percentages for a fully responsive layout */
+    /* (Calculated from 1920x1080 reference) */
+    padding-top: 3.89%;     /* 42px / 1080px */
+    padding-bottom: 6.02%;  /* 65px / 1080px */
+    padding-left: 12.34%;   /* 237px / 1920px */
+    padding-right: 12.4%;   /* 238px / 1920px */
+    /* --- END OF CHANGES --- */
 
     box-sizing: border-box;
     overflow-y: auto;
@@ -93,11 +88,8 @@ html, body {
     border-radius: 2px;
     cursor: pointer;
     background: linear-gradient(to bottom, #6a6a6a, #4d4d4d);
-
-    /* keep 16:9 but smaller thumbnails */
     aspect-ratio: 16 / 9;
-    width: 100%;   /* ← controls thumbnail size (try 70–95%) */
-
+    width: 100%; /* Fills the grid column */
     transition: transform 0.2s ease, outline 0.2s ease;
 }
 
@@ -114,7 +106,7 @@ html, body {
 
 .gallery-cell:hover {
     outline: 3px solid #00ff00;
-    outline-offset: 3px; /* <--- CHANGE THIS LINE to a POSITIVE value */
+    outline-offset: 3px;
     z-index: 2;
 }
 
@@ -123,7 +115,7 @@ html, body {
     filter: brightness(1.1);
 }
 
-/* Selected state */
+/* Selected state (kept for JS functionality) */
 .gallery-cell.selected {
     outline: 2px solid #ff0000;
 }
@@ -153,36 +145,26 @@ html, body {
 ================================
 */
 /* === DETAILS SCREEN OVERLAY === */
-/* === DETAILS SCREEN OVERLAY === */
 .details-screen {
-    /* This should be 'absolute' to be contained by .camera-display
-       or 'fixed' if it must cover the whole viewport.
-       'absolute' is likely what you want. */
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 10;
-
-    /* Background properties are fine */
     background: #000;
     background-image: url('../UX/info2PS.png');
-    background-size: 100% 100%; /* Changed from cover */
+    background-size: 100% 100%;
     background-position: center;
-
     display: none;
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
     box-sizing: border-box;
     overflow: hidden;
-
-    /* Replaces 'padding: 30px' */
-    /* (Assuming 30px on a 1080p screen) */
-    padding-top: 2.78%;    /* 30px / 1080px height */
+    padding-top: 2.78%;
     padding-bottom: 2.78%;
-    padding-left: 1.56%;   /* 30px / 1920px width */
+    padding-left: 1.56%;
     padding-right: 1.56%;
 }
 
@@ -200,10 +182,8 @@ html, body {
     font-weight: bold;
     padding: 8px 15px;
     cursor: pointer;
-    /* Replaces 'margin-bottom: 20px' */
-    margin-bottom: 1.85%; /* 20px / 1080px height */
-
-    flex-shrink: 0; /* Add this to prevent it from shrinking */
+    margin-bottom: 1.85%;
+    flex-shrink: 0;
     z-index: 20;
     align-self: flex-start;
 }
@@ -212,7 +192,7 @@ html, body {
     color: #000;
 }
 
-/* === BALANCED 2x2 GRID INSIDE DETAILS === *//* === BALANCED 2x2 GRID INSIDE DETAILS === */
+/* === BALANCED 2x2 GRID INSIDE DETAILS === */
 .details-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -220,12 +200,9 @@ html, body {
     grid-template-areas:
         "image title"
         "meta  desc";
-
-    /* Replaces 'gap: 20px 40px' */
-    row-gap: 1.85%;    /* 20px / 1080px height */
-    column-gap: 2.08%; /* 40px / 1920px width */
-
-    flex-grow: 1; /* Fills remaining space */
+    row-gap: 1.85%;
+    column-gap: 2.08%;
+    flex-grow: 1;
     width: 100%;
     overflow: hidden;
 }
@@ -275,7 +252,7 @@ html, body {
     color: #f0f0f0;
     overflow-y: auto;
     padding: 10px;
-    font-family: Arial, sans-serif;
+    /* Removed redundant font-family */
 }
 .details-meta div {
     display: flex;
@@ -295,7 +272,7 @@ html, body {
     color: #ccc;
     padding: 10px;
     overflow-y: auto;
-    font-family: Arial, sans-serif;
+    /* Removed redundant font-family */
     font-size: 1.1em;
     line-height: 1.6;
 }
