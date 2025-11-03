@@ -6,30 +6,44 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* === GLOBAL 16:9 CAMERA FRAME === */
 html, body {
     width: 100%;
-    height: 100%;
-    background: var(--screen-bg);
+    height: 100vh;
+    background: #000; /* Letterbox bars */
     color: var(--text-color);
     font-family: Arial, Helvetica, sans-serif;
     overflow: hidden;
-}
 
-/* Fullscreen app container */
-.camera-app {
-    position: fixed;
-    inset: 0;
+    /* --- MASTER SCALING --- */
+    font-size: 1.2vmin;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* --- END OF CHANGES --- */
+}
+
+/* === MAIN 16:9 CONTAINER === */
+.camera-app {
+    position: relative; /* CHANGED */
+    display: flex;
+    flex-direction: column;
     background: var(--screen-bg);
+
+    /* --- 16:9 LOCK --- */
+    aspect-ratio: 16 / 9;
+    width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    /* --- END OF CHANGES --- */
 }
 
 /* Video container */
 .video-wrapper {
     position: absolute;
     inset: 0;
+    width: 100%; /* Stays relative to .camera-app */
+    height: 100%; /* Stays relative to .camera-app */
     overflow: hidden;
 }
 
@@ -52,58 +66,78 @@ html, body {
     z-index: 1;
 }
 
+/* === NEW TRANSPARENT OVERLAY === */
+.viewfinder-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    /* !!! UPDATE THIS PATH !!! */
+    background-image: url('../UX/shootingUIPS.png');
+    background-size: 100% 100%;
+    background-position: center;
+    pointer-events: none;
+    z-index: 2; /* Sits over video, under HUD */
+}
+/* === END OF NEW RULE === */
+
+
 /* HUD UI */
 .hud-container {
     display: none;
     position: absolute;
     inset: 0;
-    z-index: 2;
+    z-index: 3; /* CHANGED - Was 2 */
 }
 
+/* Top-Left HUD */
 div.rec, div.bat, div.wifi {
     position: absolute;
-    top: 10px;
-    padding: 4px 6px;
+    top: 2.5%; /* CHANGED */
+    padding: 0.4em 0.6em; /* CHANGED */
     background: rgba(0,0,0,0.5);
-    border-radius: 3px;
+    border-radius: 0.25em; /* CHANGED */
     font-size: 0.8em;
 }
-div.rec  { left: 10px; }
-div.bat  { left: 110px; }
-div.wifi { left: 200px; }
+div.rec  { left: 2.5%; } /* CHANGED */
+div.bat  { left: 10%; }  /* CHANGED */
+div.wifi { left: 16%; }  /* CHANGED */
 
+/* Top-Right HUD */
 div.mode, div.focus, div.drive {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 6px;
+    right: 2.5%; /* CHANGED */
+    padding: 0.4em 0.6em; /* CHANGED */
     background: rgba(0,0,0,0.5);
-    border-radius: 3px;
+    border-radius: 0.25em; /* CHANGED */
     font-size: 0.8em;
     text-align: right;
 }
-div.focus { top: 35px; }
-div.drive { top: 60px; }
+div.mode  { top: 2.5%; } /* CHANGED */
+div.focus { top: 5.5%; } /* CHANGED */
+div.drive { top: 8.5%; } /* CHANGED */
 
+/* Bottom-Left HUD */
 div.settings {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
+    bottom: 2.5%; /* CHANGED */
+    left: 2.5%; /* CHANGED */
     display: flex;
-    gap: 15px;
+    gap: 1.2em; /* CHANGED */
     background: rgba(0,0,0,0.5);
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 0.4em 0.8em; /* CHANGED */
+    border-radius: 0.3em; /* CHANGED */
     font-size: 0.8em;
 }
 
+/* Bottom-Right HUD */
 div.format {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    padding: 4px 6px;
+    bottom: 2.5%; /* CHANGED */
+    right: 2.5%; /* CHANGED */
+    padding: 0.4em 0.6em; /* CHANGED */
     background: rgba(0,0,0,0.5);
-    border-radius: 3px;
+    border-radius: 0.25em; /* CHANGED */
     font-size: 0.8em;
 }
 
@@ -128,27 +162,27 @@ div.format {
 /* Histogram */
 .histogram {
     position: absolute;
-    top: 10px;
+    top: 2.5%; /* CHANGED */
     left: 50%;
     transform: translateX(-50%);
-    width: 200px;
-    height: 80px;
+    width: 15em;  /* CHANGED */
+    height: 6em;  /* CHANGED */
     background: rgba(0,0,0,0.6);
-    border-radius: 4px;
+    border-radius: 0.3em; /* CHANGED */
 }
 
 /* Loading screen */
 .loading-screen {
     position: absolute;
     inset: 0;
-    display: flex;
+    display: none; /* <-- Hides the loading screen */
     align-items: center;
     justify-content: center;
     background: #000;
     color: #00ff00;
     font-family: monospace;
     font-size: 2em;
-    z-index: 3;
+    z-index: 4; /* CHANGED - Was 3 */
 }
 
 .loading-text::after {
@@ -157,13 +191,9 @@ div.format {
     width: 1em;
     height: 1em;
     border-radius: 50%;
-    margin: 20px auto 0;
+    margin: 1em auto 0; /* CHANGED */
     background-color: #00ff00;
     animation: blink 1s steps(2, start) infinite;
-}
-
-@keyframes blink {
-    50% { opacity: 0; }
 }
 
 /* Menu container */
@@ -172,7 +202,7 @@ div.format {
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 4;
+    z-index: 5; /* CHANGED - Was 4 */
     display: none;
     background: #000;
 }
@@ -180,20 +210,20 @@ div.format {
 /* Simplified buttons */
 .ui-buttons {
     position: absolute;
-    right: 20px;
+    right: 2.5%; /* CHANGED */
     top: 20%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    z-index: 5;
+    gap: 0.8em; /* CHANGED */
+    z-index: 6; /* CHANGED - Was 5 */
 }
 
 .ui-btn {
     background: rgba(255,255,255,0.1);
     color: #fff;
-    border: 1px solid #555;
-    border-radius: 8px;
-    padding: 10px 15px;
+    border: 0.1em solid #555;      /* CHANGED */
+    border-radius: 0.6em;       /* CHANGED */
+    padding: 0.8em 1.3em;       /* CHANGED */
     cursor: pointer;
     transition: all 0.2s ease;
 }

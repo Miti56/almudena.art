@@ -9,6 +9,7 @@
 </head>
 
 <body>
+
 <div class="camera-app">
     <div class="video-wrapper">
         <video autoplay muted loop id="bg-video">
@@ -17,9 +18,7 @@
         <canvas id="video-effect-canvas"></canvas>
     </div>
 
-    <div class="loading-screen">
-        <div class="loading-text">Initializing Camera...</div>
-    </div>
+    <div class="viewfinder-overlay"></div>
 
     <div class="hud-container">
         <div class="rec"><div class="content">Rec <b>&#x2022;</b></div></div>
@@ -46,10 +45,13 @@
     <div class="menu-container"></div>
 
     <div class="ui-buttons">
-<!--        <button class="ui-btn btn-1">Menu 1</button>-->
         <button class="ui-btn btn-2">Gallery</button>
         <button class="ui-btn btn-disp">Disp</button>
         <button class="ui-btn btn-back">Back</button>
+    </div>
+
+    <div class="loading-screen">
+        <div class="loading-text">Initializing Camera...</div>
     </div>
 </div>
 

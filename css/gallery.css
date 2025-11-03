@@ -81,12 +81,13 @@ html, body {
 .gallery-cell {
     position: relative;
     overflow: hidden;
-    border-radius: 0.15em; /* CHANGED */
+    border-radius: 0.15em;
     cursor: pointer;
     background: linear-gradient(to bottom, #6a6a6a, #4d4d4d);
     aspect-ratio: 16 / 9;
     width: 100%;
-    transition: transform 0.2s ease, outline 0.2s ease;
+    /* Remove all transitions for an immediate change */
+    /* transition: transform 0.2s ease, box-shadow 0.2s ease, z-index 0s ease 0.2s; */
 }
 
 .gallery-cell img {
@@ -94,22 +95,26 @@ html, body {
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.2s ease, filter 0.2s ease;
+    /* Remove transitions for immediate change */
+    /* transition: transform 0.2s ease, filter 0.2s ease; */
 }
 
 .gallery-cell:hover {
-    outline: 0.2em solid #00ff00; /* CHANGED */
-    outline-offset: 0.2em; /* CHANGED */
     z-index: 2;
+    transform: scale(1.08); /* Keep the scale-up for pop-out */
+    /* Simple, solid shadow for immediate depth, no glow */
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.7);
+    /* Remove all transitions for immediate change */
+    /* transition: transform 0.2s ease, box-shadow 0.2s ease, z-index 0s ease; */
 }
 
 .gallery-cell:hover img {
-    transform: scale(1.05);
-    filter: brightness(1.1);
+    transform: scale(1.05); /* Maintain image scale inside the cell */
+    filter: brightness(1.1); /* Keep a slight brightness increase if desired, or remove */
 }
 
 .gallery-cell.selected {
-    outline: 0.15em solid #ff0000; /* CHANGED */
+    outline: 0.15em solid #ff0000;
 }
 
 /* ===== 🎬 PLAY BUTTON OVERLAY ===== */
@@ -120,17 +125,44 @@ html, body {
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
     color: rgba(255, 255, 255, 0.85);
-    font-size: 2.5em; /* Scales with vmin */
+    font-size: 2.5em;
     opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    text-shadow: 0 0 0.5em rgba(0, 0, 0, 0.7); /* CHANGED */
+    /* Remove transition for immediate appearance */
+    /* transition: opacity 0.3s ease, transform 0.3s ease; */
+    text-shadow: 0 0 0.5em rgba(0, 0, 0, 0.7);
     pointer-events: none;
+    z-index: 4;
 }
 .gallery-cell:hover::after {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
 }
 
+/* ===== SELECTION ICON OVERLAY ===== */
+.gallery-cell::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../UX/selectorCut.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0;
+    /* Remove all transitions for immediate change */
+    /* transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease; */
+    z-index: 3;
+    pointer-events: none;
+}
+
+.gallery-cell:hover::before {
+    opacity: 1;
+    transform: scale(1.03); /* Keep the scale-up for the icon */
+    /* Remove green glow filter, keep it stark */
+    /* filter: drop-shadow(0 0 0.8em rgba(0, 255, 0, 0.9)); */
+}
 
 /* ================================
    DETAILS SCREEN (BALANCED 2x2 GRID)
