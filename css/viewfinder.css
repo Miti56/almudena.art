@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'VCR'; /* 1. Give your fonts a name */
+    src: url('../fonts/VCR_OSD_MONO_1.001.ttf') format('truetype'); /* 2. Set the path to your .ttf file */
+    font-weight: normal;
+    font-style: normal;
+}
+
 :root {
     --screen-bg: #000;
     --text-color: #fff;
@@ -12,7 +19,10 @@ html, body {
     height: 100vh;
     background: #000; /* Letterbox bars */
     color: var(--text-color);
-    font-family: Arial, Helvetica, sans-serif;
+
+    /* === APPLY YOUR FONT HERE === */
+    font-family: 'VCR', Arial, Helvetica, sans-serif; /* <-- CHANGED */
+
     overflow: hidden;
 
     /* --- MASTER SCALING --- */
@@ -73,7 +83,7 @@ html, body {
     width: 100%;
     height: 100%;
     /* !!! UPDATE THIS PATH !!! */
-    background-image: url('../UX/shootingUIPS.png');
+    background-image: url('../UX/shootingUIPSFixed.png');
     background-size: 100% 100%;
     background-position: center;
     pointer-events: none;
@@ -89,56 +99,68 @@ html, body {
     inset: 0;
     z-index: 3; /* CHANGED - Was 2 */
 }
+/* === NEW GROUPED RULE === */
+/* This new rule targets all HUD elements to change their size in one place */
+div.rec, div.bat, div.wifi,
+div.mode, div.focus, div.drive,
+div.settings,
+div.format {
+    font-size: 1.5em; /* CHANGED - Was 0.8em. Adjust as needed */
+}
 
 /* Top-Left HUD */
+/* We remove fonts-size from here as it's in the rule above */
 div.rec, div.bat, div.wifi {
     position: absolute;
-    top: 2.5%; /* CHANGED */
-    padding: 0.4em 0.6em; /* CHANGED */
+    top: 2.5%;
+    padding: 0.4em 0.6em;
     background: rgba(0,0,0,0.5);
-    border-radius: 0.25em; /* CHANGED */
-    font-size: 0.8em;
+    border-radius: 0.25em;
+    /* fonts-size: 0.8em; <-- REMOVED */
 }
-div.rec  { left: 2.5%; } /* CHANGED */
-div.bat  { left: 10%; }  /* CHANGED */
-div.wifi { left: 16%; }  /* CHANGED */
+div.rec  { left: 2.5%; }
+div.bat  { left: 12%; }  /* CHANGED - Was 10% */
+div.wifi { left: 19%; }  /* CHANGED - Was 16% */
 
 /* Top-Right HUD */
+/* We remove fonts-size from here as it's in the rule above */
 div.mode, div.focus, div.drive {
     position: absolute;
-    right: 2.5%; /* CHANGED */
-    padding: 0.4em 0.6em; /* CHANGED */
+    right: 2.5%;
+    padding: 0.4em 0.6em;
     background: rgba(0,0,0,0.5);
-    border-radius: 0.25em; /* CHANGED */
-    font-size: 0.8em;
+    border-radius: 0.25em;
+    /* fonts-size: 0.8em; <-- REMOVED */
     text-align: right;
 }
-div.mode  { top: 2.5%; } /* CHANGED */
-div.focus { top: 5.5%; } /* CHANGED */
-div.drive { top: 8.5%; } /* CHANGED */
+div.mode  { top: 2.5%; }
+div.focus { top: 7.5%; } /* CHANGED - Was 5.5% */
+div.drive { top: 12.5%; } /* CHANGED - Was 8.5% */
 
 /* Bottom-Left HUD */
+/* We remove fonts-size from here as it's in the rule above */
 div.settings {
     position: absolute;
-    bottom: 2.5%; /* CHANGED */
-    left: 2.5%; /* CHANGED */
+    bottom: 2.5%;
+    left: 2.5%;
     display: flex;
-    gap: 1.2em; /* CHANGED */
+    gap: 1.2em;
     background: rgba(0,0,0,0.5);
-    padding: 0.4em 0.8em; /* CHANGED */
-    border-radius: 0.3em; /* CHANGED */
-    font-size: 0.8em;
+    padding: 0.4em 0.8em;
+    border-radius: 0.3em;
+    /* fonts-size: 0.8em; <-- REMOVED */
 }
 
 /* Bottom-Right HUD */
+/* We remove fonts-size from here as it's in the rule above */
 div.format {
     position: absolute;
-    bottom: 2.5%; /* CHANGED */
-    right: 2.5%; /* CHANGED */
-    padding: 0.4em 0.6em; /* CHANGED */
+    bottom: 2.5%;
+    right: 2.5%;
+    padding: 0.4em 0.6em;
     background: rgba(0,0,0,0.5);
-    border-radius: 0.25em; /* CHANGED */
-    font-size: 0.8em;
+    border-radius: 0.25em;
+    /* fonts-size: 0.8em; <-- REMOVED */
 }
 
 .focus-grid {

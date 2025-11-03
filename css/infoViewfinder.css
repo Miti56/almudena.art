@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'VCR'; /* 1. Give your fonts a name */
+    src: url('../fonts/VCR_OSD_MONO_1.001.ttf') format('truetype'); /* 2. Set the path to your .ttf file */
+    font-weight: normal;
+    font-style: normal;
+}
+
 /* General page setup */
 html, body {
     margin: 0;
@@ -11,6 +18,7 @@ html, body {
     Helvetica, Arial, sans-serif;
     font-weight: bold;
     font-size: 1.2vmin;
+    font-family: 'VCR', Arial, Helvetica, sans-serif; /* <-- CORRECTED */
 }
 
 /* Use flexbox on the body to center the 16:9 display */
