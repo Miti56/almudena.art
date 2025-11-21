@@ -10,38 +10,45 @@
 <body>
 <div class="camera-display">
     <div class="gallery-screen">
-        <div class="gallery-title">My Media</div>
+        <div class="gallery-title">MY MEDIA</div>
+
         <div class="gallery-grid">
             <div class="gallery-cell"
                  data-src="../previews/preview1.JPG"
-                 data-title="Title Test 1"
-                 data-description="This is a fantastic piece of media. It explores themes of... Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                 data-title="Project Alpha"
+                 data-description="A visually stunning exploration of urban decay in the 21st century. Shot on 35mm film stock to capture the gritty texture of the environment."
                  data-director="Jane Doe"
                  data-actor="John Smith"
                  data-year="2024"
-                 data-runtime="1h 45m">
+                 data-runtime="1h 45m"
+                 data-res="4K HEVC"
+                 data-size="14.2 GB">
                 <img src="../previews/preview1.JPG" alt="Title Test 1">
             </div>
 
             <div class="gallery-cell"
                  data-src="../previews/preview2.JPG"
-                 data-title="Title Test 2"
-                 data-description="A thrilling sequel to the first installment."
+                 data-title="Night Walk"
+                 data-description="A thriller set entirely during a single night in Tokyo. High ISO performance test."
                  data-director="Peter Jones"
                  data-actor="Anna Williams"
                  data-year="2025"
-                 data-runtime="2h 10m">
+                 data-runtime="2h 10m"
+                 data-res="1080p RAW"
+                 data-size="8.4 GB">
                 <img src="../previews/preview2.JPG" alt="Title Test 2">
             </div>
 
             <div class="gallery-cell"
                  data-src="../previews/preview4.JPG"
-                 data-title="Title Test 3"
-                 data-description="An unrelated short film."
+                 data-title="The Signal"
+                 data-description="Short film submission. Audio sync test."
                  data-director="Alan Smithee"
                  data-actor="N/A"
                  data-year="2023"
-                 data-runtime="15m">
+                 data-runtime="15m"
+                 data-res="1080p MP4"
+                 data-size="1.1 GB">
                 <img src="../previews/preview4.JPG" alt="Title Test 3">
             </div>
 
@@ -54,40 +61,55 @@
         </div>
 
         <div class="details-screen">
-            <button class="back-button" id="gallery-back-button">&larr; BACK</button>
-            <div class="details-content">
-                <div class="details-image">
-                    <img src="" alt="Selected media">
+            <div class="details-container">
+
+                <div class="details-left">
+                    <div class="preview-wrapper">
+                        <img src="" alt="Selected media" class="details-img-display">
+                    </div>
+                    <button class="back-button" id="gallery-back-button">&lt; RETURN TO INDEX</button>
                 </div>
-                <div class="details-title-area">
-                    <h2 class="details-title"></h2>
-                </div>
-                <div class="details-meta-area">
-                    <dl class="details-meta">
-                        <div>
-                            <dt>Director:</dt>
-                            <dd class="details-director"></dd>
+
+                <div class="details-right">
+                    <div class="meta-header">
+                        <h2 class="details-title"></h2>
+                        <span class="meta-badge details-year"></span>
+                    </div>
+
+                    <div class="meta-tech-grid">
+                        <div class="tech-item">
+                            <span class="label">RES</span>
+                            <span class="value details-res">--</span>
                         </div>
-                        <div>
-                            <dt>Starring:</dt>
-                            <dd class="details-actor"></dd>
+                        <div class="tech-item">
+                            <span class="label">SIZE</span>
+                            <span class="value details-size">--</span>
                         </div>
-                        <div>
-                            <dt>Year:</dt>
-                            <dd class="details-year"></dd>
+                        <div class="tech-item">
+                            <span class="label">TIME</span>
+                            <span class="value details-runtime">--</span>
                         </div>
-                        <div>
-                            <dt>Runtime:</dt>
-                            <dd class="details-runtime"></dd>
+                    </div>
+
+                    <div class="meta-credits">
+                        <div class="credit-row">
+                            <span class="label">DIR:</span>
+                            <span class="value details-director"></span>
                         </div>
-                    </dl>
-                </div>
-                <div class="details-description-area">
-                    <p class="details-description"></p>
+                        <div class="credit-row">
+                            <span class="label">CAST:</span>
+                            <span class="value details-actor"></span>
+                        </div>
+                    </div>
+
+                    <div class="meta-description-box">
+                        <p class="details-description"></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="ui-buttons">
         <button class="ui-btn btn-2">Gallery</button>
         <button class="ui-btn btn-disp">Disp</button>

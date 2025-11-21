@@ -5,34 +5,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const cells = galleryGrid?.querySelectorAll('.gallery-cell') || [];
     const detailsScreen = document.querySelector('.details-screen');
 
-    // === NEW: Selectors for the Details Screen Elements ===
-    // (We check if detailsScreen exists first to avoid errors)
+    // === NEW SELECTORS FOR THE NEW LAYOUT ===
     const detailsBackButton = detailsScreen?.querySelector('#gallery-back-button');
-    const detailsImage = detailsScreen?.querySelector('.details-image img');
+    const detailsImage = detailsScreen?.querySelector('.details-img-display');
     const detailsTitle = detailsScreen?.querySelector('.details-title');
+
+    // Meta Selectors
     const detailsDirector = detailsScreen?.querySelector('.details-director');
     const detailsActor = detailsScreen?.querySelector('.details-actor');
     const detailsYear = detailsScreen?.querySelector('.details-year');
     const detailsRuntime = detailsScreen?.querySelector('.details-runtime');
+    const detailsRes = detailsScreen?.querySelector('.details-res');
+    const detailsSize = detailsScreen?.querySelector('.details-size');
     const detailsDescription = detailsScreen?.querySelector('.details-description');
 
 
-    // Hover title
+    // Hover title effect on the grid
     cells.forEach(cell => {
         const img = cell.querySelector('img');
         if (!img) return;
 
         cell.addEventListener('mouseenter', () => {
-            const title = cell.dataset.title || img.alt || 'My Media';
+            const title = cell.dataset.title || 'EMPTY SLOT';
             galleryTitle.textContent = title;
+            galleryTitle.style.color = cell.dataset.title ? '#fff' : '#555';
         });
         cell.addEventListener('mouseleave', () => {
-            galleryTitle.textContent = 'My Media';
+            galleryTitle.textContent = 'MY MEDIA';
+            galleryTitle.style.color = '#fff';
         });
     });
 
     // ===================================================================
-    // === GALLERY CLICK & DETAILS SCREEN LOGIC =========================
+    // === CLICK & POPULATE LOGIC ========================================
     // ===================================================================
 
     cells.forEach(cell => {
@@ -40,57 +45,51 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = cell.dataset;
             const thumbSrc = cell.querySelector('img')?.src;
 
-            // Only open details if the cell has a 'data-title'
-            // This prevents opening details for the empty/placeholder cells
+            // Only open details if there is a Title
             if (data.title && detailsScreen) {
 
-                // Populate data
-                // Use data-src (full res) but fallback to the thumbnail's src
+                // 1. Image
                 const imageUrl = data.src || thumbSrc || '';
                 detailsImage.src = imageUrl;
                 detailsImage.alt = data.title;
+
+                // 2. Text Content
                 detailsTitle.textContent = data.title;
-                detailsDescription.textContent = data.description || '';
+                detailsDescription.textContent = data.description || 'No description available.';
 
-                // Populate meta, with 'N/A' as a fallback if data is missing
-                detailsDirector.textContent = data.director || 'N/A';
-                detailsActor.textContent = data.actor || 'N/A';
-                detailsYear.textContent = data.year || 'N/A';
-                detailsRuntime.textContent = data.runtime || 'N/A';
+                // 3. Metadata (with fallbacks)
+                detailsDirector.textContent = data.director || 'Unknown';
+                detailsActor.textContent = data.actor || '-';
+                detailsYear.textContent = data.year || '----';
+                detailsRuntime.textContent = data.runtime || '-- min';
 
-                // Add an overlay to make the text readable over the background image
-                detailsScreen.style.setProperty('--background-overlay', 'rgba(0, 0, 0, 0.7)'); // Define custom property
+                // New Tech Data
+                if(detailsRes) detailsRes.textContent = data.res || 'UNK';
+                if(detailsSize) detailsSize.textContent = data.size || '---';
 
-                // Show the details screen
+                // 4. Show Screen
                 detailsScreen.classList.add('active');
             }
         });
     });
 
-    // Details screen 'Back' button listener
+    // Back Button Logic
     if (detailsBackButton) {
         detailsBackButton.addEventListener('click', () => {
-            // Hide the details screen
             detailsScreen.classList.remove('active');
-
-            // Optional: This stops video/audio from playing in the background
-            // after the user clicks "back" by clearing the image/video source.
-            if (detailsImage) {
-                detailsImage.src = '';
-            }
+            // Clear image source after animation to prevent ghosting, slight delay optional
+            setTimeout(() => {
+                if (detailsImage) detailsImage.src = '';
+            }, 200);
         });
     }
 
-
-
-
     // ===================================================================
-    // === CAMERA BUTTON HANDLERS  =======================================
+    // === CAMERA UI NAVIGATION ==========================================
     // ===================================================================
 
     const viewfinderPage = "../viewfinder.html";
 
-    // Back Button
     const backButton = document.querySelector(".btn-back");
     if (backButton) {
         backButton.addEventListener("click", () => {
@@ -98,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Display Button (usually cycles back to main view)
     const dispButton = document.querySelector(".btn-disp");
     if (dispButton) {
         dispButton.addEventListener("click", () => {
@@ -106,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gallery Button (btn-2)
     const gallerypButton = document.querySelector(".btn-2");
     if (gallerypButton) {
         gallerypButton.addEventListener("click", () => {
