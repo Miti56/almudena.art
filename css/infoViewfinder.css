@@ -1,144 +1,247 @@
 @font-face {
-    font-family: 'VCR'; /* 1. Give your fonts a name */
-    src: url('../fonts/VCR_OSD_MONO_1.001.ttf') format('truetype'); /* 2. Set the path to your .ttf file */
+    font-family: 'VCR';
+    src: url('../fonts/VCR_OSD_MONO_1.001.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
-/* General page setup */
+:root {
+    --bg-dark: #0a0a0a;
+    --bg-panel: #111111;
+    --border: #333;
+    --text-main: #ddd;
+    --text-muted: #777;
+    --accent: #4ff; /* Cyan */
+    --rec: #ff3333;
+}
+
+/* === GLOBAL 16:9 FRAME === */
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100vh; /* Use vh for full viewport height */
-    overflow: hidden; /* Prevents scrollbars */
-    background-color: #000; /* This creates the black "letterbox" bars */
-    color: #ddd;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Helvetica, Arial, sans-serif;
-    font-weight: bold;
+    height: 100vh;
+    background-color: #000;
+    overflow: hidden;
+    font-family: 'VCR', monospace;
+    color: var(--text-main);
+    /* Master Scaling */
     font-size: 1.2vmin;
-    font-family: 'VCR', Arial, Helvetica, sans-serif; /* <-- CORRECTED */
-}
-
-/* Use flexbox on the body to center the 16:9 display */
-body {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Main container */
 .camera-display {
+    position: relative;
+    background-color: var(--bg-dark);
+    aspect-ratio: 16 / 9;
+    width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* === THE DASHBOARD GRID === */
+.dashboard-grid {
+    width: 92%;
+    height: 85%;
+    display: grid;
+    /* 3 Columns, 3 Rows */
+    grid-template-columns: 1.2fr 1fr 1fr;
+    grid-template-rows: 2fr 1.5fr 1fr;
+    gap: 1em;
+    padding-right: 8em; /* Make room for the buttons on the right */
+}
+
+/* Generic Panel Style */
+.panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 0.3em;
     position: relative;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box;
-
-    /* --- THIS IS THE 16:9 LOCK --- */
-    aspect-ratio: 16 / 9;
-    width: 100vw; /* Tries to fill the width */
-    max-height: 100vh; /* ...but stops if it gets too tall */
-    /* --- END OF LOCK --- */
-
-    /* Padding is now relative to the container's scaling size */
-    padding: 2.5%;
-
-    /* Background fills the 16:9 container perfectly */
-    background-image: url('/UX/shootingInfoPS.png');
-    background-size: 100% 100%;
-    background-position: center;
-    background-repeat: no-repeat;
+    overflow: hidden;
+    padding: 1em;
 }
 
-/* Your preview rule is now PERFECT for this setup.
-   All percentages (left, top, width) are relative
-   to the .camera-display container. */
-.preview {
+.panel-label {
     position: absolute;
-    left: 16%;
-    top: 12%;
-    width: 24%;
-    aspect-ratio: 16 / 9;
-    border: 2px solid #555;
-    background: #111;
+    top: 0.5em;
+    left: 0.8em;
+    font-size: 0.9em;
+    color: var(--text-muted);
+    z-index: 2;
+}
+
+/* 1. PREVIEW PANEL (Top Left) */
+.preview-panel {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    padding: 0; /* Full bleed video */
+}
+.video-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 .preview-video {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    opacity: 0.8;
 }
-
-.info-box {
-    /* Positioning styles from middle-area are now here */
+.rec-indicator {
     position: absolute;
-    top: 23%;
-    left: 59%;
-    width: 28%;
-    height: 16%;
-
-    /* Original styles */
-    background-color: #1c1c1c;
-    border: 1px solid #333;
-    border-radius: 1px;
-    display: flex;
-    font-size: 1.5rem;
-
-    /* Styles from histogram-box are also merged for simplicity */
-    padding: 0;
-    align-items: stretch;
-    justify-content: stretch;
+    top: 1em;
+    right: 1em;
+    color: var(--rec);
+    background: rgba(0,0,0,0.7);
+    padding: 0.2em 0.5em;
+    border-radius: 0.2em;
+    font-size: 0.9em;
+    animation: blink 1.5s infinite;
 }
+@keyframes blink { 50% { opacity: 0; }}
 
-/* This new rule styles the box containing the canvas */
-.histogram-box {
-    padding: 0; /* Remove default padding */
-    background-color: #111; /* Dark background for the histogram */
-    align-items: stretch; /* Make children fill the height */
-    justify-content: stretch; /* Make children fill the width */
+/* 2. HISTOGRAM PANEL (Top Right - Spans 2 cols) */
+.histogram-panel {
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
 }
-
-/* This new rule styles the canvas itself */
+.canvas-wrapper {
+    width: 100%;
+    height: 100%;
+    margin-top: 1em;
+}
 #histogram-canvas {
     width: 100%;
     height: 100%;
 }
 
-/* Menu container */
-.menu-container {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 4;
-    display: none;
-    background: #000;
+/* 3. EXPOSURE SETTINGS (Middle Row - Spans all) */
+.exposure-panel {
+    grid-column: 1 / 4;
+    grid-row: 2 / 3;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    background: linear-gradient(to bottom, #151515, #0e0e0e);
+}
+.exp-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+}
+.exp-label {
+    font-size: 1em;
+    color: var(--text-muted);
+}
+.exp-value {
+    font-size: 3.5em;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.2);
+}
+.exp-value.highlight {
+    color: var(--accent);
+}
+.exp-divider {
+    width: 1px;
+    height: 60%;
+    background: var(--border);
 }
 
-/* Simplified buttons */
+/* 4. AUDIO PANEL (Bottom Left) */
+.audio-panel {
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+}
+.audio-meter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5em;
+    height: 100%;
+    padding-top: 1em;
+}
+.bar-container {
+    width: 100%;
+    height: 0.6em;
+    background: #222;
+    border-radius: 0.1em;
+    overflow: hidden;
+}
+.bar {
+    height: 100%;
+    width: 50%; /* animated by JS */
+    background: linear-gradient(to right, #0f0, #ff0);
+    transition: width 0.1s ease;
+}
+
+/* 5. STATUS PANEL (Bottom Middle) */
+.status-panel {
+    grid-column: 2 / 3;
+    grid-row: 3 / 4;
+    justify-content: center;
+    gap: 0.5em;
+}
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1em;
+    border-bottom: 1px solid #222;
+    padding-bottom: 0.1em;
+}
+.st-label { color: var(--text-muted); }
+.st-val { color: #fff; }
+
+/* 6. MEDIA/BATTERY (Bottom Right) */
+.media-panel {
+    grid-column: 3 / 4;
+    grid-row: 3 / 4;
+    justify-content: center;
+    gap: 1em;
+}
+.media-item {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    font-size: 1.3em;
+    color: #ddd;
+}
+.media-item i {
+    width: 1.5em;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+/* === UI BUTTONS (Exact match to Viewfinder) === */
 .ui-buttons {
     position: absolute;
-    right: 20px;
+    right: 2.5%;
     top: 20%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    z-index: 5;
+    gap: 0.8em;
+    z-index: 20;
 }
-
 .ui-btn {
     background: rgba(255,255,255,0.1);
     color: #fff;
-    border: 1px solid #555;
-    border-radius: 8px;
-    padding: 10px 15px;
+    border: 0.1em solid #555;
+    border-radius: 0.6em;
+    padding: 0.8em 1.3em;
     cursor: pointer;
+    font-family: 'VCR', monospace;
+    font-size: 1.2em;
     transition: all 0.2s ease;
+    backdrop-filter: blur(2px);
 }
 .ui-btn:hover {
-    background: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.3);
+    border-color: #fff;
 }
-

@@ -1,6 +1,6 @@
 @font-face {
-    font-family: 'VCR'; /* 1. Give your fonts a name */
-    src: url('../fonts/VCR_OSD_MONO_1.001.ttf') format('truetype'); /* 2. Set the path to your .ttf file */
+    font-family: 'VCR';
+    src: url('../fonts/VCR_OSD_MONO_1.001.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -13,252 +13,215 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* === GLOBAL 16:9 CAMERA FRAME === */
+/* === GLOBAL 16:9 CAMERA FRAME (MATCHES GALLERY EXACTLY) === */
 html, body {
+    margin: 0;
+    padding: 0;
     width: 100%;
     height: 100vh;
-    background: #000; /* Letterbox bars */
+    overflow: hidden;
+    background-color: #000; /* Letterbox bars */
     color: var(--text-color);
 
-    /* === APPLY YOUR FONT HERE === */
-    font-family: 'VCR', Arial, Helvetica, sans-serif; /* <-- CHANGED */
+    /* Font Setup */
+    font-family: 'VCR', Arial, Helvetica, sans-serif;
+    font-weight: bold;
 
-    overflow: hidden;
-
-    /* --- MASTER SCALING --- */
+    /* MASTER SCALING: This locks the size to the smallest screen dimension */
     font-size: 1.2vmin;
+
+    /* Centering Logic */
     display: flex;
     justify-content: center;
     align-items: center;
-    /* --- END OF CHANGES --- */
 }
 
-/* === MAIN 16:9 CONTAINER === */
+/* === MAIN CONTAINER === */
 .camera-app {
-    position: relative; /* CHANGED */
+    position: relative;
     display: flex;
     flex-direction: column;
-    background: var(--screen-bg);
 
-    /* --- 16:9 LOCK --- */
+    /* THE LOCK: Forces 16:9 aspect ratio */
     aspect-ratio: 16 / 9;
     width: 100vw;
     max-height: 100vh;
+
+    background: var(--screen-bg);
     overflow: hidden;
-    /* --- END OF CHANGES --- */
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
 }
 
-/* Video container */
+/* ==========================================
+   LAYER 1: VIDEO FEED
+   ========================================== */
 .video-wrapper {
     position: absolute;
-    inset: 0;
-    width: 100%; /* Stays relative to .camera-app */
-    height: 100%; /* Stays relative to .camera-app */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
     overflow: hidden;
 }
 
 #bg-video {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: none;
-    filter: brightness(1.1) contrast(1.2);
-    z-index: 0;
+    display: block; /* Ensure it displays */
+    filter: brightness(1.1) contrast(1.1);
 }
 
 #video-effect-canvas {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    pointer-events: none;
 }
 
-/* === NEW TRANSPARENT OVERLAY === */
+/* ==========================================
+   LAYER 2: STATIC OVERLAY (PNG)
+   ========================================== */
 .viewfinder-overlay {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    /* !!! UPDATE THIS PATH !!! */
+    /* Ensure this image exists at this path */
     background-image: url('../UX/shootingUIPSFixed.png');
     background-size: 100% 100%;
     background-position: center;
-    pointer-events: none;
-    z-index: 2; /* Sits over video, under HUD */
+    pointer-events: none; /* Lets clicks pass through */
+    z-index: 2;
 }
-/* === END OF NEW RULE === */
 
-
-/* HUD UI */
+/* ==========================================
+   LAYER 3: DYNAMIC HUD
+   ========================================== */
 .hud-container {
-    display: none;
     position: absolute;
-    inset: 0;
-    z-index: 3; /* CHANGED - Was 2 */
-}
-/* === NEW GROUPED RULE === */
-/* This new rule targets all HUD elements to change their size in one place */
-div.rec, div.bat, div.wifi,
-div.mode, div.focus, div.drive,
-div.settings,
-div.format {
-    font-size: 1.5em; /* CHANGED - Was 0.8em. Adjust as needed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none; /* Important so buttons below aren't blocked */
 }
 
-/* Top-Left HUD */
-/* We remove fonts-size from here as it's in the rule above */
+/* Font sizing for HUD elements - Scales with vmin */
+.hud-container div {
+    font-size: 1.5em;
+    text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
+}
+
+/* Top Left Group */
 div.rec, div.bat, div.wifi {
     position: absolute;
     top: 2.5%;
-    padding: 0.4em 0.6em;
-    background: rgba(0,0,0,0.5);
-    border-radius: 0.25em;
-    /* fonts-size: 0.8em; <-- REMOVED */
+    background: rgba(0,0,0,0.4); /* Improved visibility */
+    padding: 0.2em 0.5em;
+    border-radius: 0.2em;
 }
 div.rec  { left: 2.5%; }
-div.bat  { left: 12%; }  /* CHANGED - Was 10% */
-div.wifi { left: 19%; }  /* CHANGED - Was 16% */
+div.bat  { left: 12%; }
+div.wifi { left: 18%; }
 
-/* Top-Right HUD */
-/* We remove fonts-size from here as it's in the rule above */
-div.mode, div.focus, div.drive {
-    position: absolute;
-    right: 2.5%;
-    padding: 0.4em 0.6em;
-    background: rgba(0,0,0,0.5);
-    border-radius: 0.25em;
-    /* fonts-size: 0.8em; <-- REMOVED */
-    text-align: right;
+/* REC Blink Animation */
+div.rec b {
+    color: var(--rec-color);
+    animation: blink 1s steps(2, start) infinite;
 }
-div.mode  { top: 2.5%; }
-div.focus { top: 7.5%; } /* CHANGED - Was 5.5% */
-div.drive { top: 12.5%; } /* CHANGED - Was 8.5% */
+@keyframes blink { 50% { opacity: 0; } }
 
-/* Bottom-Left HUD */
-/* We remove fonts-size from here as it's in the rule above */
-div.settings {
-    position: absolute;
-    bottom: 2.5%;
-    left: 2.5%;
-    display: flex;
-    gap: 1.2em;
-    background: rgba(0,0,0,0.5);
-    padding: 0.4em 0.8em;
-    border-radius: 0.3em;
-    /* fonts-size: 0.8em; <-- REMOVED */
-}
-
-/* Bottom-Right HUD */
-/* We remove fonts-size from here as it's in the rule above */
-div.format {
-    position: absolute;
-    bottom: 2.5%;
-    right: 2.5%;
-    padding: 0.4em 0.6em;
-    background: rgba(0,0,0,0.5);
-    border-radius: 0.25em;
-    /* fonts-size: 0.8em; <-- REMOVED */
-}
-
+/* Focus Grid */
 .focus-grid {
     position: absolute;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.3; /* Subtle */
 }
-
 .focus-grid .grid-lines {
-    position: absolute;
-    inset: 0;
+    width: 100%;
+    height: 100%;
     background-image:
-            linear-gradient(to right, rgba(255,255,255,0.2) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255,255,255,0.2) 1px, transparent 1px);
+            linear-gradient(to right, #fff 1px, transparent 1px),
+            linear-gradient(to bottom, #fff 1px, transparent 1px);
     background-size: 33.33% 33.33%;
-    pointer-events: none;
 }
 
 /* Histogram */
 .histogram {
     position: absolute;
-    top: 2.5%; /* CHANGED */
+    top: 2.5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 15em;  /* CHANGED */
-    height: 6em;  /* CHANGED */
-    background: rgba(0,0,0,0.6);
-    border-radius: 0.3em; /* CHANGED */
-}
-
-/* Loading screen */
-.loading-screen {
-    position: absolute;
-    inset: 0;
-    display: none; /* <-- Hides the loading screen */
-    align-items: center;
+    width: 12em;
+    height: 5em;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #555;
+    border-radius: 0.2em;
+    display: flex; /* To center canvas inside */
     justify-content: center;
-    background: #000;
-    color: #00ff00;
-    font-family: monospace;
-    font-size: 2em;
-    z-index: 4; /* CHANGED - Was 3 */
+    align-items: center;
+}
+.histogram canvas {
+    width: 95%;
+    height: 90%;
 }
 
-.loading-text::after {
-    content: '';
-    display: block;
-    width: 1em;
-    height: 1em;
-    border-radius: 50%;
-    margin: 1em auto 0; /* CHANGED */
-    background-color: #00ff00;
-    animation: blink 1s steps(2, start) infinite;
-}
-
-/* Menu container */
-.menu-container {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 5; /* CHANGED - Was 4 */
-    display: none;
-    background: #000;
-}
-
-/* Simplified buttons */
+/* ==========================================
+   LAYER 5: UI BUTTONS (MATCHING GALLERY)
+   ========================================== */
 .ui-buttons {
     position: absolute;
-    right: 2.5%; /* CHANGED */
-    top: 20%;
+    right: 2.5%;
+    top: 20%; /* Locked vertical position */
     display: flex;
     flex-direction: column;
-    gap: 0.8em; /* CHANGED */
-    z-index: 6; /* CHANGED - Was 5 */
+    gap: 0.8em;
+    z-index: 10; /* High z-index to be clickable */
+    pointer-events: auto;
 }
 
 .ui-btn {
     background: rgba(255,255,255,0.1);
     color: #fff;
-    border: 0.1em solid #555;      /* CHANGED */
-    border-radius: 0.6em;       /* CHANGED */
-    padding: 0.8em 1.3em;       /* CHANGED */
+    border: 0.1em solid #555;
+    border-radius: 0.6em;
+    padding: 0.8em 1.3em;
     cursor: pointer;
+    font-family: 'VCR', monospace;
+    font-size: 1.2em; /* Scales with vmin */
     transition: all 0.2s ease;
+    backdrop-filter: blur(2px);
 }
+
 .ui-btn:hover {
-    background: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.3);
+    border-color: #fff;
 }
 
-/* REC Blink */
-div.rec b {
-    color: var(--rec-color);
-    animation: blink 1s steps(2, jump-none) infinite;
+/* ==========================================
+   LOADING SCREEN
+   ========================================== */
+.loading-screen {
+    position: absolute;
+    inset: 0;
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    z-index: 20;
 }
 
-@keyframes blink {
-    50% { opacity: 0; }
+.loading-text {
+    color: #0f0;
+    font-size: 2em;
+    text-transform: uppercase;
 }

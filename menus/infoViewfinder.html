@@ -3,19 +3,92 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Camera Display</title>
+    <title>Camera Info Display</title>
     <link rel="stylesheet" href="../css/infoViewfinder.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" />
 </head>
 <body>
 
 <div class="camera-display">
-    <div class="preview">
-        <video autoplay muted loop class="preview-video">
-            <source src="../previews/videoTest.mp4" type="video/mp4" />
-        </video>
-    </div>
-    <div class="info-box histogram-box">
-        <canvas id="histogram-canvas"></canvas>
+
+    <div class="dashboard-grid">
+
+        <div class="panel preview-panel">
+            <div class="panel-label">LIVE FEED</div>
+            <div class="video-container">
+                <video autoplay muted loop class="preview-video">
+                    <source src="../previews/videoTest.mp4" type="video/mp4" />
+                </video>
+                <div class="rec-indicator">REC</div>
+            </div>
+        </div>
+
+        <div class="panel histogram-panel">
+            <div class="panel-label">LUMA HISTOGRAM</div>
+            <div class="canvas-wrapper">
+                <canvas id="histogram-canvas"></canvas>
+            </div>
+        </div>
+
+        <div class="panel exposure-panel">
+            <div class="exp-group">
+                <span class="exp-label">SHUTTER</span>
+                <span class="exp-value">1/50</span>
+            </div>
+            <div class="exp-divider"></div>
+            <div class="exp-group">
+                <span class="exp-label">APERTURE</span>
+                <span class="exp-value">f/2.8</span>
+            </div>
+            <div class="exp-divider"></div>
+            <div class="exp-group">
+                <span class="exp-label">ISO</span>
+                <span class="exp-value highlight">800</span>
+            </div>
+        </div>
+
+        <div class="panel audio-panel">
+            <div class="panel-label">AUDIO CH1/CH2</div>
+            <div class="audio-meter">
+                <div class="bar-container">
+                    <div class="bar" id="audio-l"></div>
+                </div>
+                <div class="bar-container">
+                    <div class="bar" id="audio-r"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel status-panel">
+            <div class="status-row">
+                <span class="st-label">FORMAT</span>
+                <span class="st-val">XAVC S-I 4K</span>
+            </div>
+            <div class="status-row">
+                <span class="st-label">FRAME RATE</span>
+                <span class="st-val">24p</span>
+            </div>
+            <div class="status-row">
+                <span class="st-label">COLOR</span>
+                <span class="st-val">S-Log3</span>
+            </div>
+            <div class="status-row">
+                <span class="st-label">WB</span>
+                <span class="st-val">5600K</span>
+            </div>
+        </div>
+
+        <div class="panel media-panel">
+            <div class="media-item">
+                <i class="fas fa-sd-card"></i>
+                <span>114m REMAIN</span>
+            </div>
+            <div class="media-item">
+                <i class="fas fa-battery-three-quarters"></i>
+                <span>82%</span>
+            </div>
+        </div>
+
     </div>
 
     <div class="ui-buttons">
@@ -26,8 +99,6 @@
 
 </div>
 
-<script type="module" src="/js/infoViewfinder.js"></script>
-
+<script type="module" src="../js/infoViewfinder.js"></script>
 </body>
-
 </html>
