@@ -1,113 +1,119 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const galleryScreen = document.querySelector('.gallery-screen');
-    const galleryTitle = document.querySelector('.gallery-title');
     const galleryGrid = document.querySelector('.gallery-grid');
-    const cells = galleryGrid?.querySelectorAll('.gallery-cell') || [];
+    const galleryTitle = document.querySelector('.gallery-title');
     const detailsScreen = document.querySelector('.details-screen');
+    const detailsBackButton = document.getElementById('gallery-back-button');
 
-    // === NEW SELECTORS FOR THE NEW LAYOUT ===
-    const detailsBackButton = detailsScreen?.querySelector('#gallery-back-button');
-    const detailsImage = detailsScreen?.querySelector('.details-img-display');
-    const detailsTitle = detailsScreen?.querySelector('.details-title');
+    // Details Elements
+    const detailsImage = document.querySelector('.details-img-display');
+    const detailsTitle = document.querySelector('.details-title');
+    const detailsDescription = document.querySelector('.details-description');
 
-    // Meta Selectors
-    const detailsDirector = detailsScreen?.querySelector('.details-director');
-    const detailsActor = detailsScreen?.querySelector('.details-actor');
-    const detailsYear = detailsScreen?.querySelector('.details-year');
-    const detailsRuntime = detailsScreen?.querySelector('.details-runtime');
-    const detailsRes = detailsScreen?.querySelector('.details-res');
-    const detailsSize = detailsScreen?.querySelector('.details-size');
-    const detailsDescription = detailsScreen?.querySelector('.details-description');
+    // Check if a second description paragraph exists in CSS/HTML, if not we create/select it
+    let detailsDescription2 = document.querySelector('.details-description-2');
+    if (!detailsDescription2 && detailsDescription) {
+        detailsDescription2 = document.createElement('p');
+        detailsDescription2.className = 'details-description-2';
+        detailsDescription2.style.marginTop = '1rem';
+        detailsDescription.parentNode.appendChild(detailsDescription2);
+    }
 
+    const detailsDirector = document.querySelector('.details-director');
+    const detailsActor = document.querySelector('.details-actor');
+    const detailsYear = document.querySelector('.details-year');
+    const detailsRuntime = document.querySelector('.details-runtime');
+    const detailsRes = document.querySelector('.details-res');
+    const detailsSize = document.querySelector('.details-size');
 
-    // Hover title effect on the grid
-    cells.forEach(cell => {
-        const img = cell.querySelector('img');
-        if (!img) return;
+    // 1. Fetch Data
+    fetch('../content/films.json')
+        .then(response => response.json())
+        .then(data => {
+            renderGallery(data);
+        })
+        .catch(err => console.error('Error loading gallery data:', err));
 
-        cell.addEventListener('mouseenter', () => {
-            const title = cell.dataset.title || 'EMPTY SLOT';
-            galleryTitle.textContent = title;
-            galleryTitle.style.color = cell.dataset.title ? '#fff' : '#555';
-        });
-        cell.addEventListener('mouseleave', () => {
-            galleryTitle.textContent = 'MY MEDIA';
-            galleryTitle.style.color = '#fff';
-        });
-    });
+    // 2. Render Grid
+    function renderGallery(items) {
+        // Clear existing static HTML
+        galleryGrid.innerHTML = '';
 
-    // ===================================================================
-    // === CLICK & POPULATE LOGIC ========================================
-    // ===================================================================
+        items.forEach(item => {
+            const cell = document.createElement('div');
+            cell.className = 'gallery-cell';
 
-    cells.forEach(cell => {
-        cell.addEventListener('click', () => {
-            const data = cell.dataset;
-            const thumbSrc = cell.querySelector('img')?.src;
+            const img = document.createElement('img');
+            img.src = item.src;
+            img.alt = item.title || 'Gallery Image';
+            cell.appendChild(img);
 
-            // Only open details if there is a Title
-            if (data.title && detailsScreen) {
+            // Only add interactions if it is a Movie (has a title)
+            if (item.title) {
+                // Hover Logic
+                cell.addEventListener('mouseenter', () => {
+                    galleryTitle.textContent = item.title;
+                    galleryTitle.style.color = '#fff';
+                });
+                cell.addEventListener('mouseleave', () => {
+                    galleryTitle.textContent = 'MY MEDIA';
+                    galleryTitle.style.color = '#fff';
+                });
 
-                // 1. Image
-                const imageUrl = data.src || thumbSrc || '';
-                detailsImage.src = imageUrl;
-                detailsImage.alt = data.title;
-
-                // 2. Text Content
-                detailsTitle.textContent = data.title;
-                detailsDescription.textContent = data.description || 'No description available.';
-
-                // 3. Metadata (with fallbacks)
-                detailsDirector.textContent = data.director || 'Unknown';
-                detailsActor.textContent = data.actor || '-';
-                detailsYear.textContent = data.year || '----';
-                detailsRuntime.textContent = data.runtime || '-- min';
-
-                // New Tech Data
-                if(detailsRes) detailsRes.textContent = data.res || 'UNK';
-                if(detailsSize) detailsSize.textContent = data.size || '---';
-
-                // 4. Show Screen
-                detailsScreen.classList.add('active');
+                // Click Logic
+                cell.addEventListener('click', () => openDetails(item));
+            } else {
+                // It is just a filler photo
+                cell.style.cursor = 'default';
             }
-        });
-    });
 
-    // Back Button Logic
+            galleryGrid.appendChild(cell);
+        });
+    }
+
+    // 3. Populate Details
+    function openDetails(data) {
+        if (!detailsScreen) return;
+
+        detailsImage.src = data.src;
+        detailsTitle.textContent = data.title;
+
+        detailsDescription.textContent = data.description || '';
+        if (detailsDescription2) {
+            detailsDescription2.textContent = data.description2 || '';
+        }
+
+        detailsDirector.textContent = data.director || '';
+        detailsActor.textContent = data.actor || '';
+        detailsYear.textContent = data.year || '';
+        detailsRuntime.textContent = data.runtime || '';
+        detailsRes.textContent = data.res || '';
+        detailsSize.textContent = data.size || '';
+
+        detailsScreen.classList.add('active');
+    }
+
+    // 4. Back Button Logic
     if (detailsBackButton) {
         detailsBackButton.addEventListener('click', () => {
             detailsScreen.classList.remove('active');
-            // Clear image source after animation to prevent ghosting, slight delay optional
             setTimeout(() => {
                 if (detailsImage) detailsImage.src = '';
             }, 200);
         });
     }
 
-    // ===================================================================
-    // === CAMERA UI NAVIGATION ==========================================
-    // ===================================================================
-
+    // 5. Navigation Buttons
     const viewfinderPage = "../viewfinder.html";
 
-    const backButton = document.querySelector(".btn-back");
-    if (backButton) {
-        backButton.addEventListener("click", () => {
-            window.location.href = viewfinderPage;
-        });
-    }
+    document.querySelector(".btn-back")?.addEventListener("click", () => {
+        window.location.href = viewfinderPage;
+    });
 
-    const dispButton = document.querySelector(".btn-disp");
-    if (dispButton) {
-        dispButton.addEventListener("click", () => {
-            window.location.href = "../menus/infoViewfinder.html";
-        });
-    }
+    document.querySelector(".btn-disp")?.addEventListener("click", () => {
+        window.location.href = "../menus/infoViewfinder.html";
+    });
 
-    const gallerypButton = document.querySelector(".btn-2");
-    if (gallerypButton) {
-        gallerypButton.addEventListener("click", () => {
-            window.location.href = viewfinderPage;
-        });
-    }
+    document.querySelector(".btn-2")?.addEventListener("click", () => {
+        window.location.href = viewfinderPage;
+    });
 });
