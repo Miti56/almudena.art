@@ -57,7 +57,7 @@ html, body {
     width: 100%;
     height: 100%;
     /* ADD the background image here */
-    background-image: url('../UX/complete_transparent.png');
+    /*background-image: url('../UX/complete_transparent.png');*/
     background-size: 100% 100%;
     background-position: center;
     z-index: 2; /* Sits above the grid */
@@ -394,11 +394,51 @@ html, body {
     background: #666;
 }
 
-/* UI BUTTONS - POSITION LOCK */
+/* ================================================
+   UI BUTTONS (MATCHING SYSTEM STYLE)
+================================================ */
 .ui-buttons {
     position: absolute;
     right: 2.5%;
     top: 20%;
-    /* Ensure buttons are above the details screen */
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em; /* Space between buttons */
+    /* Ensure buttons are above the details screen and overlay */
     z-index: 20;
 }
+
+.ui-btn {
+    /* The Glassy Look */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+
+    /* Typography */
+    color: #fff;
+    font-family: 'VCR', monospace; /* matches the rest of the UI */
+    font-size: 1.2em; /* scales with window size */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    /* Borders & Shape */
+    border: 0.1em solid #555;
+    border-radius: 0.6em;
+    padding: 0.8em 1.3em;
+
+    /* Interaction */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ui-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #fff;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    transform: scale(1.02);
+}
+
+.ui-btn:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.5);
+}
+
